@@ -1,0 +1,641 @@
+{
+  "info": {
+    "name": "Notably",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "bruno",
+      "event": []
+    },
+    {
+      "name": "01-User_Tests",
+      "item": [
+        {
+          "name": "01-Registration",
+          "item": [
+            {
+              "name": "01-NEG-NoBody",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "test(\"NEGATIVE TEST: Empty username, blank password\", function() {",
+                      "  const data = res.getBody();",
+                      "  expect(res.getStatus()).to.equal(400);",
+                      "});",
+                      "",
+                      ""
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "disabled": false,
+                    "type": "default"
+                  }
+                ],
+                "url": "http://localhost:8080/api/v1/register"
+              }
+            },
+            {
+              "name": "02-NEG-EmptyUname-EmptyPwd",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "test(\"NEGATIVE TEST: Empty username, blank password\", function() {",
+                      "  const data = res.getBody();",
+                      "  expect(res.getStatus()).to.equal(400);",
+                      "});",
+                      "",
+                      ""
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "disabled": false,
+                    "type": "default"
+                  }
+                ],
+                "url": "http://localhost:8080/api/v1/register",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"\",\n  \"password\": \"   \"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "02-NEG-NoUname-OkPwd",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "test(\"NEGATIVE TEST: Empty username, Non-blank valid password\", function() {",
+                      "  const data = res.getBody();",
+                      "  expect(res.getStatus()).to.equal(400);",
+                      "});",
+                      "",
+                      ""
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "disabled": false,
+                    "type": "default"
+                  }
+                ],
+                "url": "http://localhost:8080/api/v1/register",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"\",\n  \"password\": \"a password\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "03-POSI-OkUname2-OkPwd",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "test(\"POSITIVE TEST: Valid username, Valid password\", function() {",
+                      "  const data = res.getBody();",
+                      "  expect(res.getStatus()).to.equal(201);",
+                      "});",
+                      "",
+                      ""
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "disabled": false,
+                    "type": "default"
+                  }
+                ],
+                "url": "http://localhost:8080/api/v1/register",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"richardFeynman@expired.com\",\n  \"password\": \"Richard's password\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "04-POSI-OkUname-OkPwd",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "test(\"POSITIVE TEST: Valid username, Valid password\", function() {",
+                      "  const data = res.getBody();",
+                      "  expect(res.getStatus()).to.equal(201);",
+                      "});",
+                      "",
+                      ""
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "disabled": false,
+                    "type": "default"
+                  }
+                ],
+                "url": "http://localhost:8080/api/v1/register",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"kartik@somewhere.com\",\n  \"password\": \"a password\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "02-Login",
+          "item": [
+            {
+              "name": "01-NEG-NonExistentUser",
+              "event": [],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/login",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"nonexistent@nowhere.net\",\n  \"password\": \"a password\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "02-NEG-WrongPassword",
+              "event": [],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/login",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"kartik@somewhere.com\",\n  \"password\": \"a WRONG password\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "03-POSI-ValidUser",
+              "event": [],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/login",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"kartik@somewhere.com\",\n  \"password\": \"a password\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "03-GetOurself",
+          "item": [
+            {
+              "name": "01-NEG-NotUs",
+              "event": [],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/user?userid=richardFeynman%40expired.com"
+              }
+            },
+            {
+              "name": "02-POSI-Us",
+              "event": [],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/user?userid=kartik%40somewhere.com"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02-Note_Tests",
+      "item": [
+        {
+          "name": "02-Read-SingleNoteForUser",
+          "item": [
+            {
+              "name": "01-NEG-WrongUser",
+              "event": [],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note/2gKlqjMJtK2BNTOV6ciEFKb6LND?userid=richardFeynman%40expired.com"
+              }
+            },
+            {
+              "name": "02-NEG-NonexistentUser",
+              "event": [],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note/abcdefgh?userid=noone@nowhere.biz"
+              }
+            },
+            {
+              "name": "03-NEG-WrongNoteID",
+              "event": [],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note/abcdefgh?userid=kartik%40somewhere.com"
+              }
+            },
+            {
+              "name": "04-POSI-LoggedInUserAndValidNoteID",
+              "event": [],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note/2gKlqjMJtK2BNTOV6ciEFKb6LND?userid=kartik%40somewhere.com"
+              }
+            }
+          ]
+        },
+        {
+          "name": "01-Create",
+          "item": [
+            {
+              "name": "01-NEG-NoBody",
+              "event": [],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note"
+              }
+            },
+            {
+              "name": "02-NEG-NoNoteField",
+              "event": [],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_id\": \"kartik@somewhere.com\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "03-NEG-EmptyNote",
+              "event": [],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_id\": \"kartik@somewhere.com\",\n  \"note\": \"\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "04-NEG-NoUnameField",
+              "event": [],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"note\": \"a note\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "05-NEG-EmptyUname",
+              "event": [],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_id\": \"   \",\n  \"note\": \"a note\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "06-NEG-DifferentUname",
+              "event": [],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_id\": \"someone@nowhere.net\",\n  \"note\": \"a note\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "07-POSI-ValidRequest",
+              "event": [],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_id\": \"kartik@somewhere.com\",\n  \"note\": \"A THIRD note\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "03-Read-AllNotesForUser",
+          "item": [
+            {
+              "name": "01-NEG-NonexistentUser",
+              "event": [],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note?userid=noone@here.biz"
+              }
+            },
+            {
+              "name": "02-NEG-WrongUser",
+              "event": [],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note?userid=noone@here.biz"
+              }
+            },
+            {
+              "name": "03-POSI-LoggedInUser",
+              "event": [],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note?userid=kartik%40somewhere.com"
+              }
+            }
+          ]
+        },
+        {
+          "name": "04-Update",
+          "item": [
+            {
+              "name": "01-NEG-NoBody",
+              "event": [],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note/2gJxbJMEmmOuTM6qprsI5LKB3fy"
+              }
+            },
+            {
+              "name": "02-NEG-NoNoteField",
+              "event": [],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note/2gJxbJMEmmOuTM6qprsI5LKB3fy",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_id\": \"kartik@somewhere.com\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "03-NEG-EmptyNote",
+              "event": [],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note/2gJxbJMEmmOuTM6qprsI5LKB3fy",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_id\": \"kartik@somewhere.com\",\n  \"note\": \"\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "04-NEG-NoUnameField",
+              "event": [],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note/2gJxbJMEmmOuTM6qprsI5LKB3fy",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"note\": \"a note\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "05-NEG-EmptyUname",
+              "event": [],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note/2gJxbJMEmmOuTM6qprsI5LKB3fy",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_id\": \"   \",\n  \"note\": \"a note\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "06-POSI-ValidChangeNote",
+              "event": [],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note/2gKmYSek4qf5tZXME3PMhKcjKX8",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"2gKmYSek4qf5tZXME3PMhKcjKX8\",\n  \"user_id\": \"kartik@somewhere.com\",\n  \"note\": \"a FIRST CHANGED note\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "05-Delete-SingleNoteForUser",
+          "item": [
+            {
+              "name": "01-POSI-DeleteExisting",
+              "event": [],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note/abcdef?userid=kartik%40somewhere.com"
+              }
+            },
+            {
+              "name": "02-POSI-DeleteAGAIN",
+              "event": [],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note/abcdef?userid=kartik%40somewhere.com"
+              }
+            }
+          ]
+        },
+        {
+          "name": "06-Delete-AllNotesForUser",
+          "item": [
+            {
+              "name": "01-POSI-DeleteExisting",
+              "event": [],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note?userid=kartik%40somewhere.com"
+              }
+            },
+            {
+              "name": "02-POSI-DeleteAGAIN",
+              "event": [],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note?userid=kartik%40somewhere.com"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": []
+}

@@ -1,0 +1,22 @@
+meta {
+  name: 07-POSI-ValidRequest
+  type: http
+  seq: 7
+}
+
+post {
+  url: http://localhost:8080/api/v1/note
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "user_id": "kartik@somewhere.com",
+    "note": "A THIRD note"
+  }
+}
+
+assert {
+  res.status: eq 201
+}

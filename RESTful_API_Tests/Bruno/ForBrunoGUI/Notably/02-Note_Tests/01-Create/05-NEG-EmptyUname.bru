@@ -1,0 +1,22 @@
+meta {
+  name: 05-NEG-EmptyUname
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost:8080/api/v1/note
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "user_id": "   ",
+    "note": "a note"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

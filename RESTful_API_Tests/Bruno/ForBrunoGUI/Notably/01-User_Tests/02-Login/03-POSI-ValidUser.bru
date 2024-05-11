@@ -1,0 +1,22 @@
+meta {
+  name: 03-POSI-ValidUser
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8080/api/v1/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": "kartik@somewhere.com",
+    "password": "a password"
+  }
+}
+
+assert {
+  res.status: eq 200
+}

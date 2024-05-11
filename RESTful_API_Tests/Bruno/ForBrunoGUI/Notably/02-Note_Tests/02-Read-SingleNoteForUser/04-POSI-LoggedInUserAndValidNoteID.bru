@@ -1,0 +1,23 @@
+meta {
+  name: 04-POSI-LoggedInUserAndValidNoteID
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:8080/api/v1/note/2gKlqjMJtK2BNTOV6ciEFKb6LND?userid=kartik%40somewhere.com
+  body: none
+  auth: none
+}
+
+query {
+  userid: kartik%40somewhere.com
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  /note/:id?userid=
+}

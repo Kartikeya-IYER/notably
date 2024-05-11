@@ -1,0 +1,1460 @@
+{
+  "name": "Notably",
+  "version": "1",
+  "items": [
+    {
+      "type": "folder",
+      "name": "01-User_Tests",
+      "items": [
+        {
+          "type": "folder",
+          "name": "01-Registration",
+          "items": [
+            {
+              "type": "http",
+              "name": "01-NEG-NoBody",
+              "seq": 1,
+              "request": {
+                "url": "http://localhost:8080/api/v1/register",
+                "method": "POST",
+                "headers": [
+                  {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "enabled": true
+                  }
+                ],
+                "body": {
+                  "mode": "none",
+                  "json": "{\n  \"id\": \"\",\n  \"password\": \"   \"\n}",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 400",
+                    "enabled": true,
+                    "uid": "BbOpjlfO6rzkCHa0tLAdR"
+                  }
+                ],
+                "tests": "test(\"NEGATIVE TEST: Empty username, blank password\", function() {\n  const data = res.getBody();\n  expect(res.getStatus()).to.equal(400);\n});\n\n",
+                "query": []
+              }
+            },
+            {
+              "type": "http",
+              "name": "02-NEG-EmptyUname-EmptyPwd",
+              "seq": 3,
+              "request": {
+                "url": "http://localhost:8080/api/v1/register",
+                "method": "POST",
+                "headers": [
+                  {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "enabled": true
+                  }
+                ],
+                "body": {
+                  "mode": "json",
+                  "json": "{\n  \"id\": \"\",\n  \"password\": \"   \"\n}",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 400",
+                    "enabled": true,
+                    "uid": "DQGTSSteJQGDfKn9NBxcL"
+                  }
+                ],
+                "tests": "test(\"NEGATIVE TEST: Empty username, blank password\", function() {\n  const data = res.getBody();\n  expect(res.getStatus()).to.equal(400);\n});\n\n",
+                "query": []
+              }
+            },
+            {
+              "type": "http",
+              "name": "02-NEG-NoUname-OkPwd",
+              "seq": 2,
+              "request": {
+                "url": "http://localhost:8080/api/v1/register",
+                "method": "POST",
+                "headers": [
+                  {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "enabled": true
+                  }
+                ],
+                "body": {
+                  "mode": "json",
+                  "json": "{\n  \"id\": \"\",\n  \"password\": \"a password\"\n}",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 400",
+                    "enabled": true,
+                    "uid": "UnSlBagwZi5cr0OyjB8p0"
+                  }
+                ],
+                "tests": "test(\"NEGATIVE TEST: Empty username, Non-blank valid password\", function() {\n  const data = res.getBody();\n  expect(res.getStatus()).to.equal(400);\n});\n\n",
+                "query": []
+              }
+            },
+            {
+              "type": "http",
+              "name": "03-POSI-OkUname2-OkPwd",
+              "seq": 4,
+              "request": {
+                "url": "http://localhost:8080/api/v1/register",
+                "method": "POST",
+                "headers": [
+                  {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "enabled": true
+                  }
+                ],
+                "body": {
+                  "mode": "json",
+                  "json": "{\n  \"id\": \"richardFeynman@expired.com\",\n  \"password\": \"Richard's password\"\n}",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 201",
+                    "enabled": true,
+                    "uid": "8M32piI6u8N4Hc20pfmSm"
+                  }
+                ],
+                "tests": "test(\"POSITIVE TEST: Valid username, Valid password\", function() {\n  const data = res.getBody();\n  expect(res.getStatus()).to.equal(201);\n});\n\n",
+                "query": []
+              }
+            },
+            {
+              "type": "http",
+              "name": "04-POSI-OkUname-OkPwd",
+              "seq": 5,
+              "request": {
+                "url": "http://localhost:8080/api/v1/register",
+                "method": "POST",
+                "headers": [
+                  {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "enabled": true
+                  }
+                ],
+                "body": {
+                  "mode": "json",
+                  "json": "{\n  \"id\": \"kartik@somewhere.com\",\n  \"password\": \"a password\"\n}",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 201",
+                    "enabled": true,
+                    "uid": "JriWTCMngabaycbPevqmd"
+                  }
+                ],
+                "tests": "test(\"POSITIVE TEST: Valid username, Valid password\", function() {\n  const data = res.getBody();\n  expect(res.getStatus()).to.equal(201);\n});\n\n",
+                "query": []
+              }
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "02-Login",
+          "items": [
+            {
+              "type": "http",
+              "name": "01-NEG-NonExistentUser",
+              "seq": 1,
+              "request": {
+                "url": "http://localhost:8080/api/v1/login",
+                "method": "POST",
+                "headers": [],
+                "body": {
+                  "mode": "json",
+                  "json": "{\n  \"id\": \"nonexistent@nowhere.net\",\n  \"password\": \"a password\"\n}",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 404",
+                    "enabled": true,
+                    "uid": "ccvvxS3KIP4edtecPXPbW"
+                  }
+                ],
+                "tests": "",
+                "query": []
+              }
+            },
+            {
+              "type": "http",
+              "name": "02-NEG-WrongPassword",
+              "seq": 2,
+              "request": {
+                "url": "http://localhost:8080/api/v1/login",
+                "method": "POST",
+                "headers": [],
+                "body": {
+                  "mode": "json",
+                  "json": "{\n  \"id\": \"kartik@somewhere.com\",\n  \"password\": \"a WRONG password\"\n}",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 403",
+                    "enabled": true,
+                    "uid": "q1FQpIa9Wn9Oa7DTEDHEb"
+                  }
+                ],
+                "tests": "",
+                "query": []
+              }
+            },
+            {
+              "type": "http",
+              "name": "03-POSI-ValidUser",
+              "seq": 3,
+              "request": {
+                "url": "http://localhost:8080/api/v1/login",
+                "method": "POST",
+                "headers": [],
+                "body": {
+                  "mode": "json",
+                  "json": "{\n  \"id\": \"kartik@somewhere.com\",\n  \"password\": \"a password\"\n}",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 200",
+                    "enabled": true,
+                    "uid": "IEKh6yThkammCvwc2AT2W"
+                  }
+                ],
+                "tests": "",
+                "query": []
+              }
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "03-GetOurself",
+          "items": [
+            {
+              "type": "http",
+              "name": "01-NEG-NotUs",
+              "seq": 1,
+              "request": {
+                "url": "http://localhost:8080/api/v1/user?userid=richardFeynman%40expired.com",
+                "method": "GET",
+                "headers": [],
+                "body": {
+                  "mode": "none",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 403",
+                    "enabled": true,
+                    "uid": "QULeeRA5EdeUvuvtVfynX"
+                  }
+                ],
+                "tests": "",
+                "query": [
+                  {
+                    "name": "userid",
+                    "value": "richardFeynman%40expired.com",
+                    "enabled": true
+                  }
+                ]
+              }
+            },
+            {
+              "type": "http",
+              "name": "02-POSI-Us",
+              "seq": 2,
+              "request": {
+                "url": "http://localhost:8080/api/v1/user?userid=kartik%40somewhere.com",
+                "method": "GET",
+                "headers": [],
+                "body": {
+                  "mode": "none",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 200",
+                    "enabled": true,
+                    "uid": "YvXg3IBYrXeTusqeXFzYl"
+                  }
+                ],
+                "tests": "",
+                "query": [
+                  {
+                    "name": "userid",
+                    "value": "kartik%40somewhere.com",
+                    "enabled": true
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "name": "02-Note_Tests",
+      "items": [
+        {
+          "type": "folder",
+          "name": "02-Read-SingleNoteForUser",
+          "items": [
+            {
+              "type": "http",
+              "name": "01-NEG-WrongUser",
+              "seq": 1,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note/2gKlqjMJtK2BNTOV6ciEFKb6LND?userid=richardFeynman%40expired.com",
+                "method": "GET",
+                "headers": [],
+                "body": {
+                  "mode": "none",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 404",
+                    "enabled": true,
+                    "uid": "0IwzMmJKWcsRZar5M3E8U"
+                  }
+                ],
+                "tests": "",
+                "query": [
+                  {
+                    "name": "userid",
+                    "value": "richardFeynman%40expired.com",
+                    "enabled": true
+                  }
+                ]
+              }
+            },
+            {
+              "type": "http",
+              "name": "02-NEG-NonexistentUser",
+              "seq": 2,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note/abcdefgh?userid=noone@nowhere.biz",
+                "method": "GET",
+                "headers": [],
+                "body": {
+                  "mode": "none",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 404",
+                    "enabled": true,
+                    "uid": "qXlmS7t8aTtXtIjkofWtM"
+                  }
+                ],
+                "tests": "",
+                "query": [
+                  {
+                    "name": "userid",
+                    "value": "noone@nowhere.biz",
+                    "enabled": true
+                  }
+                ]
+              }
+            },
+            {
+              "type": "http",
+              "name": "03-NEG-WrongNoteID",
+              "seq": 3,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note/abcdefgh?userid=kartik%40somewhere.com",
+                "method": "GET",
+                "headers": [],
+                "body": {
+                  "mode": "none",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 404",
+                    "enabled": true,
+                    "uid": "m3kEODoLoLoKChL4twat3"
+                  }
+                ],
+                "tests": "",
+                "query": [
+                  {
+                    "name": "userid",
+                    "value": "kartik%40somewhere.com",
+                    "enabled": true
+                  }
+                ]
+              }
+            },
+            {
+              "type": "http",
+              "name": "04-POSI-LoggedInUserAndValidNoteID",
+              "seq": 4,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note/2gKlqjMJtK2BNTOV6ciEFKb6LND?userid=kartik%40somewhere.com",
+                "method": "GET",
+                "headers": [],
+                "body": {
+                  "mode": "none",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 200",
+                    "enabled": true,
+                    "uid": "L31whnqiUulSRkpdGHIZJ"
+                  }
+                ],
+                "tests": "",
+                "query": [
+                  {
+                    "name": "userid",
+                    "value": "kartik%40somewhere.com",
+                    "enabled": true
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "01-Create",
+          "items": [
+            {
+              "type": "http",
+              "name": "01-NEG-NoBody",
+              "seq": 1,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note",
+                "method": "POST",
+                "headers": [],
+                "body": {
+                  "mode": "none",
+                  "json": "{\n  \"user_id\": \"\",\n  \"note\": \"a note\"\n}",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 400",
+                    "enabled": true,
+                    "uid": "qTkSbJJAzgiOzNkAtRhjH"
+                  }
+                ],
+                "tests": "",
+                "query": []
+              }
+            },
+            {
+              "type": "http",
+              "name": "02-NEG-NoNoteField",
+              "seq": 2,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note",
+                "method": "POST",
+                "headers": [],
+                "body": {
+                  "mode": "json",
+                  "json": "{\n  \"user_id\": \"kartik@somewhere.com\"\n}",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 400",
+                    "enabled": true,
+                    "uid": "DpJ36XgYxBUCsUiO7oG1J"
+                  }
+                ],
+                "tests": "",
+                "query": []
+              }
+            },
+            {
+              "type": "http",
+              "name": "03-NEG-EmptyNote",
+              "seq": 3,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note",
+                "method": "POST",
+                "headers": [],
+                "body": {
+                  "mode": "json",
+                  "json": "{\n  \"user_id\": \"kartik@somewhere.com\",\n  \"note\": \"\"\n}",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 400",
+                    "enabled": true,
+                    "uid": "Afid5onkAz33dZF49bNji"
+                  }
+                ],
+                "tests": "",
+                "query": []
+              }
+            },
+            {
+              "type": "http",
+              "name": "04-NEG-NoUnameField",
+              "seq": 4,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note",
+                "method": "POST",
+                "headers": [],
+                "body": {
+                  "mode": "json",
+                  "json": "{\n  \"note\": \"a note\"\n}",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 400",
+                    "enabled": true,
+                    "uid": "boWGwYM6Ic4i6jAngnXFz"
+                  }
+                ],
+                "tests": "",
+                "query": []
+              }
+            },
+            {
+              "type": "http",
+              "name": "05-NEG-EmptyUname",
+              "seq": 5,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note",
+                "method": "POST",
+                "headers": [],
+                "body": {
+                  "mode": "json",
+                  "json": "{\n  \"user_id\": \"   \",\n  \"note\": \"a note\"\n}",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 400",
+                    "enabled": true,
+                    "uid": "kSIyvdQAtkJ5tmQWsqb1i"
+                  }
+                ],
+                "tests": "",
+                "query": []
+              }
+            },
+            {
+              "type": "http",
+              "name": "06-NEG-DifferentUname",
+              "seq": 6,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note",
+                "method": "POST",
+                "headers": [],
+                "body": {
+                  "mode": "json",
+                  "json": "{\n  \"user_id\": \"someone@nowhere.net\",\n  \"note\": \"a note\"\n}",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 403",
+                    "enabled": true,
+                    "uid": "SaS1yQhFYriNAq074lDD8"
+                  }
+                ],
+                "tests": "",
+                "query": []
+              }
+            },
+            {
+              "type": "http",
+              "name": "07-POSI-ValidRequest",
+              "seq": 7,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note",
+                "method": "POST",
+                "headers": [],
+                "body": {
+                  "mode": "json",
+                  "json": "{\n  \"user_id\": \"kartik@somewhere.com\",\n  \"note\": \"A THIRD note\"\n}",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 201",
+                    "enabled": true,
+                    "uid": "4gh281lTDngOz49xim9pH"
+                  }
+                ],
+                "tests": "",
+                "query": []
+              }
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "03-Read-AllNotesForUser",
+          "items": [
+            {
+              "type": "http",
+              "name": "01-NEG-NonexistentUser",
+              "seq": 1,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note?userid=noone@here.biz",
+                "method": "GET",
+                "headers": [],
+                "body": {
+                  "mode": "none",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 404",
+                    "enabled": true,
+                    "uid": "uUkbWebtJVoHhjkjJvVaM"
+                  }
+                ],
+                "tests": "",
+                "query": [
+                  {
+                    "name": "userid",
+                    "value": "noone@here.biz",
+                    "enabled": true
+                  }
+                ]
+              }
+            },
+            {
+              "type": "http",
+              "name": "02-NEG-WrongUser",
+              "seq": 2,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note?userid=noone@here.biz",
+                "method": "GET",
+                "headers": [],
+                "body": {
+                  "mode": "none",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 404",
+                    "enabled": true,
+                    "uid": "p1cVHZsST9M04tBcR3RAX"
+                  }
+                ],
+                "tests": "",
+                "query": [
+                  {
+                    "name": "userid",
+                    "value": "noone@here.biz",
+                    "enabled": true
+                  }
+                ]
+              }
+            },
+            {
+              "type": "http",
+              "name": "03-POSI-LoggedInUser",
+              "seq": 3,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note?userid=kartik%40somewhere.com",
+                "method": "GET",
+                "headers": [],
+                "body": {
+                  "mode": "none",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 200",
+                    "enabled": true,
+                    "uid": "78JAmxkc4yWlPGhuwMZim"
+                  }
+                ],
+                "tests": "",
+                "query": [
+                  {
+                    "name": "userid",
+                    "value": "kartik%40somewhere.com",
+                    "enabled": true
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "04-Update",
+          "items": [
+            {
+              "type": "http",
+              "name": "01-NEG-NoBody",
+              "seq": 1,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note/2gJxbJMEmmOuTM6qprsI5LKB3fy",
+                "method": "POST",
+                "headers": [],
+                "body": {
+                  "mode": "none",
+                  "json": "{\n  \"user_id\": \"\",\n  \"note\": \"a note\"\n}",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 400",
+                    "enabled": true,
+                    "uid": "pMa0KicOc8LLzsuEmfkX9"
+                  }
+                ],
+                "tests": "",
+                "query": []
+              }
+            },
+            {
+              "type": "http",
+              "name": "02-NEG-NoNoteField",
+              "seq": 2,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note/2gJxbJMEmmOuTM6qprsI5LKB3fy",
+                "method": "POST",
+                "headers": [],
+                "body": {
+                  "mode": "json",
+                  "json": "{\n  \"user_id\": \"kartik@somewhere.com\"\n}",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 400",
+                    "enabled": true,
+                    "uid": "M1d1NVhO52SgmfqGegGSg"
+                  }
+                ],
+                "tests": "",
+                "query": []
+              }
+            },
+            {
+              "type": "http",
+              "name": "03-NEG-EmptyNote",
+              "seq": 3,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note/2gJxbJMEmmOuTM6qprsI5LKB3fy",
+                "method": "POST",
+                "headers": [],
+                "body": {
+                  "mode": "json",
+                  "json": "{\n  \"user_id\": \"kartik@somewhere.com\",\n  \"note\": \"\"\n}",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 400",
+                    "enabled": true,
+                    "uid": "EpoIremiDN9kYl0RS3jjU"
+                  }
+                ],
+                "tests": "",
+                "query": []
+              }
+            },
+            {
+              "type": "http",
+              "name": "04-NEG-NoUnameField",
+              "seq": 4,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note/2gJxbJMEmmOuTM6qprsI5LKB3fy",
+                "method": "POST",
+                "headers": [],
+                "body": {
+                  "mode": "json",
+                  "json": "{\n  \"note\": \"a note\"\n}",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 400",
+                    "enabled": true,
+                    "uid": "j3CuyEN5MB6Y7ZGIuOj63"
+                  }
+                ],
+                "tests": "",
+                "query": []
+              }
+            },
+            {
+              "type": "http",
+              "name": "05-NEG-EmptyUname",
+              "seq": 5,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note/2gJxbJMEmmOuTM6qprsI5LKB3fy",
+                "method": "POST",
+                "headers": [],
+                "body": {
+                  "mode": "json",
+                  "json": "{\n  \"user_id\": \"   \",\n  \"note\": \"a note\"\n}",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 400",
+                    "enabled": true,
+                    "uid": "nY92Ld8AXhNO1ypMGHpTV"
+                  }
+                ],
+                "tests": "",
+                "query": []
+              }
+            },
+            {
+              "type": "http",
+              "name": "06-POSI-ValidChangeNote",
+              "seq": 6,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note/2gKmYSek4qf5tZXME3PMhKcjKX8",
+                "method": "POST",
+                "headers": [],
+                "body": {
+                  "mode": "json",
+                  "json": "{\n  \"id\": \"2gKmYSek4qf5tZXME3PMhKcjKX8\",\n  \"user_id\": \"kartik@somewhere.com\",\n  \"note\": \"a FIRST CHANGED note\"\n}",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 200",
+                    "enabled": true,
+                    "uid": "AUUZY5w5e3b10RUBHHLH3"
+                  }
+                ],
+                "tests": "",
+                "query": []
+              }
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "05-Delete-SingleNoteForUser",
+          "items": [
+            {
+              "type": "http",
+              "name": "01-POSI-DeleteExisting",
+              "seq": 1,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note/abcdef?userid=kartik%40somewhere.com",
+                "method": "DELETE",
+                "headers": [],
+                "body": {
+                  "mode": "none",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 200",
+                    "enabled": true,
+                    "uid": "qCupCKPbjowh5qUTN1tip"
+                  }
+                ],
+                "tests": "",
+                "query": [
+                  {
+                    "name": "userid",
+                    "value": "kartik%40somewhere.com",
+                    "enabled": true
+                  }
+                ]
+              }
+            },
+            {
+              "type": "http",
+              "name": "02-POSI-DeleteAGAIN",
+              "seq": 2,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note/abcdef?userid=kartik%40somewhere.com",
+                "method": "DELETE",
+                "headers": [],
+                "body": {
+                  "mode": "none",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 200",
+                    "enabled": true,
+                    "uid": "tyhkXBJeVspDpKeKodtXj"
+                  }
+                ],
+                "tests": "",
+                "query": [
+                  {
+                    "name": "userid",
+                    "value": "kartik%40somewhere.com",
+                    "enabled": true
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "06-Delete-AllNotesForUser",
+          "items": [
+            {
+              "type": "http",
+              "name": "01-POSI-DeleteExisting",
+              "seq": 1,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note?userid=kartik%40somewhere.com",
+                "method": "DELETE",
+                "headers": [],
+                "body": {
+                  "mode": "none",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 200",
+                    "enabled": true,
+                    "uid": "WX3mE07pca7NvjBRpgpIr"
+                  }
+                ],
+                "tests": "",
+                "query": [
+                  {
+                    "name": "userid",
+                    "value": "kartik%40somewhere.com",
+                    "enabled": true
+                  }
+                ]
+              }
+            },
+            {
+              "type": "http",
+              "name": "02-POSI-DeleteAGAIN",
+              "seq": 2,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note?userid=kartik%40somewhere.com",
+                "method": "DELETE",
+                "headers": [],
+                "body": {
+                  "mode": "none",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 200",
+                    "enabled": true,
+                    "uid": "1cb0Hgh5rDadiMPgrIrKg"
+                  }
+                ],
+                "tests": "",
+                "query": [
+                  {
+                    "name": "userid",
+                    "value": "kartik%40somewhere.com",
+                    "enabled": true
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "environments": []
+}

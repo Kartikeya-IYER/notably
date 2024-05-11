@@ -1,0 +1,44 @@
+meta {
+  name: 03-POSI-OkUname2-OkPwd
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:8080/api/v1/register
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "id": "richardFeynman@expired.com",
+    "password": "Richard's password"
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+tests {
+  test("POSITIVE TEST: Valid username, Valid password", function() {
+    const data = res.getBody();
+    expect(res.getStatus()).to.equal(201);
+  });
+  
+  
+}
+
+docs {
+  NEGATIVE TEST (should fail)
+  =============================
+  user ID is empty string ("")
+  password is blank string consisting of only multiple spaces
+  
+  The expected result is that it should return HTTP 400
+}

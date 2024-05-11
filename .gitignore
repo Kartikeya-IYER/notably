@@ -7,6 +7,7 @@
 *.dll
 *.so
 *.dylib
+cmd/notablyd/notablyd
 
 # Test binary, built with `go test -c`
 *.test
@@ -19,3 +20,11 @@
 
 # Go workspace file
 go.work
+
+# Vim temp files
+*~
+.*.swp
+.*.swo
+
+# ctags tag file
+tags

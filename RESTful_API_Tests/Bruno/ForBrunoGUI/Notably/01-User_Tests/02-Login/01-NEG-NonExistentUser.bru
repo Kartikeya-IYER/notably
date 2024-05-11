@@ -1,0 +1,22 @@
+meta {
+  name: 01-NEG-NonExistentUser
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8080/api/v1/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": "nonexistent@nowhere.net",
+    "password": "a password"
+  }
+}
+
+assert {
+  res.status: eq 404
+}
