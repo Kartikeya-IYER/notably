@@ -57,6 +57,7 @@ It doesn't have a Web GUI/frontend, but an API test suite is included which can 
 
 ## TODOs
 
+- Customizable configuration using config files.
 - Proper logging with a level-aware logger ([Uber Zap](https://github.com/uber-go/zap)) with log rotation ([Lumberjack](https://github.com/natefinch/lumberjack)).
 - [ULIDs](https://github.com/oklog/ulid) :-)
 - Proper Security:
