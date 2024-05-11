@@ -11,10 +11,6 @@ const (
 	notesTableName = "notes"
 )
 
-// NOTE: IMPORTANT: go-memdb HAS to have a column and associated index called
-// "id" as the unique PK candidate. It _has_ to be named "id" and nothing else.
-// I am disappoint :-(
-
 // In real life, this would be an sql.Open() call to an existing DB from an ACID-compliant database.
 func Open() (*NotablyDB, error) {
 	// Table "DDL" for go-memdb.
@@ -51,12 +47,11 @@ func Open() (*NotablyDB, error) {
 	notesTable := &memdb.TableSchema{
 		Name: notesTableName,
 		Indexes: map[string]*memdb.IndexSchema{
-			// id = Notes.NoteID is a UUID
+			// "id" is akin to a composite primary key.
 			"id": &memdb.IndexSchema{
 				Name:         "id",
 				Unique:       true,
 				AllowMissing: false,
-				//Indexer: &memdb.StringFieldIndex{Field: "NoteID"},
 				Indexer: &memdb.CompoundIndex{
 					Indexes: []memdb.Indexer{
 						&memdb.StringFieldIndex{Field: "NoteID"},
