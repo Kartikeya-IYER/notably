@@ -1,5 +1,5 @@
 # notably
-PoC in Go/golang of a RESTful backend API for a simple multi-user note-taking app
+Go (Golang) Proof-of-Concept of a RESTful backend API for a very simple multi-user note-taking app
 
 -------------------------------------------
 
@@ -7,7 +7,7 @@ PoC in Go/golang of a RESTful backend API for a simple multi-user note-taking ap
 
 `notably` is a small RESTful API written in Go, and forms the backend for a simple multi-user note-taking application with allows users to create, read, update, and delete plain text notes.
 
-It doesn't have a Web GUI/frontend, but an API test suite is included which can be run on an API client/IDE called _"Bruno"_. More on that in a minute.
+Notably, since this is a backend API, it doesn't have a Web GUI/frontend. However, an API test suite is included which can be run on an API client/IDE called _"Bruno"_. More on that in a minute.
 
 -------------------------------------------
 
