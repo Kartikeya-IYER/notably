@@ -3,12 +3,6 @@ PoC in Go/golang of a RESTful backend API for a simple multi-user note-taking ap
 
 -------------------------------------------
 
-[TOCM]
-
-[TOC]
-
--------------------------------------------
-
 ## What Is It?
 
 `notably` is a small RESTful API written in Go, and forms the backend for a simple multi-user note-taking application with allows users to create, read, update, and delete plain text notes.
