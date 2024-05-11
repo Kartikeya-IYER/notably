@@ -44,7 +44,7 @@ It doesn't have a Web GUI/frontend, but an API test suite is included which can 
     - User IDs are email addresses.
       - Email IDs are inherently unique, and using an Email address directly as an ID means that there's no need to look up another table in the DB to get the user "name" from an opaque integer or other ID.
   - Note operations
-   - Note IDs are KSUIDs.
+    - Note IDs are KSUIDs.
 - Rudimentary "login" and "session security" _(can you see the air quotes?)_ has been implemented, to give a taste of what it might look like when `notably` grows up.
 - Separation of concerns:
   - Since we are a backend service, if we consider the standard 3-Tier architecture, then our topmost layer is the REST API service layer. This would be the "Presentation Tier".
