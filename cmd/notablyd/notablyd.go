@@ -17,7 +17,7 @@ import (
 var httpPort = "8080"
 
 func main() {
-	log.SetFlags(log.Lshortfile | log.Ldate | log.Lmicroseconds | log.LUTC)
+	log.SetFlags(log.LstdFlags | log.Llongfile | log.Lmicroseconds | log.LUTC)
 
 	log.Println("Welcome to Notably, a simple backend for a simple multi-user note-taking web service.")
 

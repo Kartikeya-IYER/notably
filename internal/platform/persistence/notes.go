@@ -34,7 +34,7 @@ func (db *NotablyDB) addOrUpdateNoteForUser(userID, noteID, noteText string, upd
 		// Ensure that the noteID exists, since this is an update to an ostensibly existing note.
 		tempNote, err := db.GetNoteForUser(userID, noteID)
 		if err != nil {
-			return nil, fmt.Errorf("Error finding note to update for userID='%s', noteID='%s': %s",
+			return nil, fmt.Errorf("Note not found: Error finding note to update for userID='%s', noteID='%s': %s",
 				userID, noteID, err.Error())
 		}
 
@@ -61,8 +61,8 @@ func (db *NotablyDB) addOrUpdateNoteForUser(userID, noteID, noteText string, upd
 	}
 
 	// Ensure that the given userID exists in the system.
-	// We need this because I haven't found a way to do table joins,
-	// or even know if that's possible.
+	// We need this because I haven't found a way to do table joins with go-memdb,
+	// or even know if that's possible in go-memdb.
 	_, err = db.GetUserByID(userID)
 	if err != nil {
 		return nil, fmt.Errorf("Cannot add note with ID '%s' for user '%s', user was not found",
@@ -104,6 +104,15 @@ func (db *NotablyDB) GetNoteForUser(userID, noteID string) (*model.Note, error) 
 	userID, noteID, err := ourutils.ValidateUserIDAndNoteID(userID, noteID)
 	if err != nil {
 		return nil, fmt.Errorf("Cannot get note: %s", err.Error())
+	}
+
+	// Ensure that the given userID exists in the system.
+	// We need this because I haven't found a way to do table joins with go-memdb,
+	// or even know if that's possible in go-memdb.
+	_, err = db.GetUserByID(userID)
+	if err != nil {
+		return nil, fmt.Errorf("Cannot add note with ID '%s' for user '%s', user does not exist",
+			noteID, userID)
 	}
 
 	// Create read-only transaction.
@@ -168,15 +177,21 @@ func (db *NotablyDB) GetAllNotesForUser(userID string) ([]*model.Note, error) {
 	return noteList, nil
 }
 
-// Returns the number of notes deleted. This is usually 1 or 0.
+// Returns the number of notes deleted. This is usually 1 or 0 (negative when there re errors).
 func (db *NotablyDB) DeleteNoteForUser(userID, noteID string) (int, error) {
 	// Sanity checks
 	userID, noteID, err := ourutils.ValidateUserIDAndNoteID(userID, noteID)
 	if err != nil {
-		return 0, fmt.Errorf("Cannot delete note due to userID/noteID validation failure: %s", err.Error())
+		return -1, fmt.Errorf("Cannot delete note due to userID/noteID validation failure: %s", err.Error())
 	}
 
 	txn := db.Txn(true) // Write txn
+
+	// Ensure that the given userID exists in the system.
+	_, err = db.GetUserByID(userID)
+	if err != nil {
+		return -1, fmt.Errorf("Cannot get all notes for user '%s', error getting user: %s", userID, err.Error())
+	}
 
 	// NOTE: txn.DeleteAll(notesTableName, "id", noteID, userID)
 	// does NOT error out when we try to delete a deleted note.
@@ -185,27 +200,33 @@ func (db *NotablyDB) DeleteNoteForUser(userID, noteID string) (int, error) {
 	numDel, err := txn.DeleteAll(notesTableName, "id", noteID, userID)
 	if err != nil {
 		txn.Abort()
-		return 0, fmt.Errorf("Error deleting note for user '%s' noteID '%s': %s", userID, noteID, err.Error())
+		return -1, fmt.Errorf("Error deleting note for user '%s' noteID '%s': %s", userID, noteID, err.Error())
 	}
 
 	txn.Commit()
 	return numDel, nil
 }
 
-// Returns the number of notes deleted
+// Returns the number of notes deleted, which will be negative on errors.
 func (db *NotablyDB) DeleteAllNotesForUser(userID string) (int, error) {
 	// Sanity
 	userID, ok := ourutils.ValidateStringNotempty(userID)
 	if !ok {
 		// This is not OK (heh heh)
-		return 0, errors.New("Cannot delete all notes for blank/empty user")
+		return -1, errors.New("Cannot delete all notes for blank/empty user")
+	}
+
+	// Ensure that the given userID exists in the system.
+	_, err := db.GetUserByID(userID)
+	if err != nil {
+		return -1, fmt.Errorf("Cannot get all notes for user '%s', error getting user: %s", userID, err.Error())
 	}
 
 	txn := db.Txn(true) // Write txn
 	numDeleted, err := txn.DeleteAll(notesTableName, "noteUserID", userID)
 	if err != nil {
 		txn.Abort()
-		return 0, fmt.Errorf("Error deleting all note for user '%s': %s", userID, err.Error())
+		return -1, fmt.Errorf("Error deleting all notes for user '%s': %s", userID, err.Error())
 	}
 
 	txn.Commit()

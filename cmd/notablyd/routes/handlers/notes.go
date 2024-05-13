@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -38,6 +39,7 @@ func AddNoteForUser(c *gin.Context) {
 		message += " Please ensure that the body is valid JSON and"
 		message += " contains all relevant fields ('user_id', 'note')."
 		message += fmt.Sprintf(" Error: %s", err.Error())
+		log.Printf("ERROR: ADD NOTE: %s\n", message)
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": message})
 		return
 	}
@@ -48,6 +50,7 @@ func AddNoteForUser(c *gin.Context) {
 	userID, ok := ourutils.ValidateStringNotempty(userID)
 	if !ok {
 		message = "Request 'user_id' field is empty or blank"
+		log.Printf("ERROR: ADD NOTE: %s\n", message)
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": message})
 		return
 	}
@@ -56,7 +59,8 @@ func AddNoteForUser(c *gin.Context) {
 	// We don't space-trim notes; we want them as the user entered them.
 	// So we just check if it is altogether empty.
 	if noteText == "" {
-		message = "Request 'note' field is empty"
+		message = fmt.Sprintf("Request 'note' field is empty for user '%s'", userID)
+		log.Printf("ERROR: ADD NOTE: %s\n", message)
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": message})
 		return
 	}
@@ -77,13 +81,19 @@ func AddNoteForUser(c *gin.Context) {
 			respErr = http.StatusConflict
 		}
 
-		c.IndentedJSON(respErr, gin.H{"error": err.Error()})
+		message := fmt.Sprintf("Error adding note for user '%s': %s", userID, err.Error())
+		log.Printf("ERROR: ADD NOTE: %s\n", message)
+		c.IndentedJSON(respErr, gin.H{"error": message})
 		return
 	}
 
 	respData, err := json.Marshal(aNote)
 	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		message := fmt.Sprintf("Error adding note for user '%s': %s", userID, err.Error())
+		log.Printf("ERROR: ADD NOTE: %s\n", message)
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{
+			"error": message,
+		})
 		return
 	}
 
@@ -98,10 +108,14 @@ func AddNoteForUser(c *gin.Context) {
 // Attempts by a user to view or delete the notes of any user other than themself
 // will result in disappointment.
 func GetOrDeleteNoteByNoteIDForUser(c *gin.Context) {
+	reqMethod := c.Request.Method
 	if !c.Request.URL.Query().Has(UserIDQueryParamKey) {
 		// Any route where this is set as middleware MUST have the key.
+		message := fmt.Sprintf("Bad Request for %s Note. Did not find the user ID key in the query params",
+			reqMethod)
+		log.Printf("ERROR: %s NOTE: %s\n", reqMethod, message)
 		c.IndentedJSON(http.StatusBadRequest, gin.H{
-			"error": "Bad Request. Did not find the user ID key in the query params",
+			"error": message,
 		})
 		return
 	}
@@ -111,8 +125,9 @@ func GetOrDeleteNoteByNoteIDForUser(c *gin.Context) {
 	noteID := c.Param("id")
 	userID, noteID, err := ourutils.ValidateUserIDAndNoteID(userID, noteID)
 	if err != nil {
-		message := "Request " + UserIDQueryParamKey + " query param"
-		message += " and-or 'id' path param empty or blank"
+		message := fmt.Sprintf("Bad Request for %s Note. Request %s param error: %s",
+			reqMethod, UserIDQueryParamKey, err.Error())
+		log.Printf("ERROR: %s NOTE: %s\n", reqMethod, message)
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": message})
 		return
 	}
@@ -125,7 +140,6 @@ func GetOrDeleteNoteByNoteIDForUser(c *gin.Context) {
 	var isGET bool
 
 	// Now call the appropriate DB method depending on the request method.
-	reqMethod := c.Request.Method
 	if reqMethod == "" || reqMethod == http.MethodGet {
 		isGET = true
 		aNote, err = db.GetNoteForUser(userID, noteID)
@@ -133,7 +147,19 @@ func GetOrDeleteNoteByNoteIDForUser(c *gin.Context) {
 		numDeleted, err = db.DeleteNoteForUser(userID, noteID)
 	}
 	if err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		message := fmt.Sprintf("Error %s note for user '%s': %s", reqMethod, userID, err.Error())
+		log.Printf("ERROR: %s NOTE: %s\n", reqMethod, message)
+		if isGET {
+			respErr := http.StatusInternalServerError
+			// Check whether the error has "not found" in it
+			if ourutils.StrContainsInsensitive(err.Error(), "not found") {
+				respErr = http.StatusNotFound
+			}
+
+			c.IndentedJSON(respErr, gin.H{"error": message})
+		} else {
+			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": message})
+		}
 		return
 	}
 
@@ -143,18 +169,18 @@ func GetOrDeleteNoteByNoteIDForUser(c *gin.Context) {
 		// get rid of this copypasta. It offends my sensibilities.
 		respData, err := json.Marshal(aNote)
 		if err != nil {
-			respErr := http.StatusInternalServerError
-			// Check whether the error has "not found" in it
-			if ourutils.StrContainsInsensitive(err.Error(), "not found") {
-				respErr = http.StatusNotFound
-			}
-
-			c.IndentedJSON(respErr, gin.H{"error": err.Error()})
+			message := fmt.Sprintf("Error getting note for user '%s': %s", err.Error())
+			log.Printf("ERROR: GET NOTE: %s", message)
+			c.IndentedJSON(http.StatusInternalServerError, gin.H{
+				"error": message,
+			})
 			return
 		}
 
 		n := json.RawMessage(string(respData))
-		c.IndentedJSON(http.StatusOK, gin.H{"message": n})
+		c.IndentedJSON(http.StatusOK, gin.H{
+			"message": n,
+		})
 		return
 	}
 
@@ -163,10 +189,14 @@ func GetOrDeleteNoteByNoteIDForUser(c *gin.Context) {
 
 // GET Handler as well as DELETE handler for all notes for a logged-in user.
 func GetOrDeleteAllNotesForUser(c *gin.Context) {
+	reqMethod := c.Request.Method
 	if !c.Request.URL.Query().Has(UserIDQueryParamKey) {
 		// Any route where this is set as middleware MUST have the key.
+		message := fmt.Sprintf("Bad Request for %s All Notes. Did not find the user ID key in the query params",
+			reqMethod)
+		log.Printf("ERROR: %s ALL NOTES: %s\n", reqMethod, message)
 		c.IndentedJSON(http.StatusBadRequest, gin.H{
-			"error": "Bad Request. Did not find the user ID key in the query params",
+			"error": message,
 		})
 		return
 	}
@@ -175,9 +205,10 @@ func GetOrDeleteAllNotesForUser(c *gin.Context) {
 	userID := c.Request.URL.Query().Get(UserIDQueryParamKey)
 	userID, ok := ourutils.ValidateStringNotempty(userID)
 	if !ok {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{
-			"error": "Bad Request. User ID value in query params was empty",
-		})
+		message := fmt.Sprintf("Bad Request for %s All Notes: User ID is empty or missing",
+			reqMethod)
+		log.Printf("ERROR: %s ALL NOTES: %s\n", reqMethod, message)
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": message})
 		return
 	}
 
@@ -190,7 +221,6 @@ func GetOrDeleteAllNotesForUser(c *gin.Context) {
 	var isGET bool
 
 	// Now call the appropriate DB method depending on the request method.
-	reqMethod := c.Request.Method
 	if reqMethod == "" || reqMethod == http.MethodGet {
 		isGET = true
 		manyNotes, err = db.GetAllNotesForUser(userID)
@@ -198,7 +228,11 @@ func GetOrDeleteAllNotesForUser(c *gin.Context) {
 		numDeleted, err = db.DeleteAllNotesForUser(userID)
 	}
 	if err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		message := fmt.Sprintf("Error %s all notes for user '%s': %s", userID, err.Error())
+		log.Printf("ERROR: %s ALL NOTES: %s\n", reqMethod, message)
+		c.IndentedJSON(http.StatusBadRequest, gin.H{
+			"error": message,
+		})
 		return
 	}
 
@@ -206,12 +240,18 @@ func GetOrDeleteAllNotesForUser(c *gin.Context) {
 		// Now we convert the slice of our DTOs to raw JSON
 		respData, err := json.Marshal(manyNotes)
 		if err != nil {
-			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			message := fmt.Sprintf("Error getting all notes for user '%s': %s", userID, err.Error())
+			log.Printf("ERROR: GET ALL NOTES: %s\n", message)
+			c.IndentedJSON(http.StatusInternalServerError, gin.H{
+				"error": message,
+			})
 			return
 		}
 
 		n := json.RawMessage(string(respData))
-		c.IndentedJSON(http.StatusOK, gin.H{"message": n})
+		c.IndentedJSON(http.StatusOK, gin.H{
+			"message": n,
+		})
 		return
 	}
 
@@ -230,6 +270,7 @@ func UpdateNoteByNoteIDForUser(c *gin.Context) {
 		message += " Please ensure that the body is valid JSON and contains"
 		message += " all relevant fields ('id', 'user_id', 'note')."
 		message += fmt.Sprintf(" Error: %s", err.Error())
+		log.Printf("ERROR: UPDATE SINGLE NOTE: %s\n", err.Error())
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": message})
 		return
 	}
@@ -240,7 +281,8 @@ func UpdateNoteByNoteIDForUser(c *gin.Context) {
 
 	userID, noteID, err := ourutils.ValidateUserIDAndNoteID(userID, noteID)
 	if err != nil {
-		message = "Request 'user_id' and-or 'id' fields empty or blank"
+		message = fmt.Sprintf("Bad Request. Missing required field(s): %s", err.Error())
+		log.Printf("ERROR: UPDATE SINGLE NOTE: %s\n", message)
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": message})
 		return
 	}
@@ -251,7 +293,8 @@ func UpdateNoteByNoteIDForUser(c *gin.Context) {
 	// We don't space-trim notes; we want them as the user entered them.
 	// So we just check if it is altogether empty.
 	if noteText == "" {
-		message = "Request 'note' field is empty"
+		message = "Bad Request. Request 'note' field is empty"
+		log.Printf("ERROR: UPDATE SINGLE NOTE for user '%s': %s\n", userID, message)
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": message})
 		return
 	}
@@ -259,12 +302,14 @@ func UpdateNoteByNoteIDForUser(c *gin.Context) {
 	db := c.MustGet("DB").(*persistence.NotablyDB)
 	aNote, err := db.UpdateNoteForUser(userID, noteID, noteText)
 	if err != nil {
+		log.Printf("ERROR: UPDATE SINGLE NOTE for user '%s': %s\n", userID, err.Error())
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	respData, err := json.Marshal(aNote)
 	if err != nil {
+		log.Printf("ERROR: UPDATE SINGLE NOTE for user '%s': %s\n", userID, err.Error())
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -272,3 +317,6 @@ func UpdateNoteByNoteIDForUser(c *gin.Context) {
 	n := json.RawMessage(string(respData))
 	c.IndentedJSON(http.StatusOK, gin.H{"message": n})
 }
+
+// Maybe allow users to update ALL their notes in one shot?
+// If there are many notes, might need to page the notes...

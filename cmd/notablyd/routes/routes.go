@@ -22,6 +22,7 @@ func middlewareCookieMonster() gin.HandlerFunc {
 	log.Println("Setting up the middleware cookie monster (om nom nom nom)...")
 	return func(c *gin.Context) {
 		// Get the login cookie
+		message := ""
 		if cookieValue, err := c.Cookie(handlers.LoginCookieName); err == nil {
 			if cookieValue != "" {
 				// Get the active user ID from the context
@@ -42,7 +43,12 @@ func middlewareCookieMonster() gin.HandlerFunc {
 					bodyCopy := new(bytes.Buffer)
 					_, err := io.Copy(bodyCopy, c.Request.Body) // Read the whole body.
 					if err != nil {
-						c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+						message = fmt.Sprintf("Login Verification Error (POST request): Error copying request body: %s",
+							err.Error())
+						log.Printf("ERROR: LOGIN COOKIE ROUTER MIDDLEWARE: %s\n", message)
+						c.IndentedJSON(http.StatusInternalServerError, gin.H{
+							"error": message,
+						})
 						c.Abort()
 						return
 					}
@@ -50,7 +56,12 @@ func middlewareCookieMonster() gin.HandlerFunc {
 
 					err = json.Unmarshal(bodyData, &bodyMap)
 					if err != nil {
-						c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+						message = fmt.Sprintf("Login Verification Error (POST request): Error parsing copied request body: %s",
+							err.Error())
+						log.Printf("ERROR: LOGIN COOKIE ROUTER MIDDLEWARE: %s\n", message)
+						c.IndentedJSON(http.StatusInternalServerError, gin.H{
+							"error": message,
+						})
 						c.Abort()
 						return
 					}
@@ -68,8 +79,10 @@ func middlewareCookieMonster() gin.HandlerFunc {
 
 					userID, ok := ourutils.ValidateStringNotempty(userID)
 					if !ok {
+						message = fmt.Sprintf("Login Verification Error (POST request): User ID is missing or empty")
+						log.Printf("ERROR: LOGIN COOKIE ROUTER MIDDLEWARE: %s\n", message)
 						c.IndentedJSON(http.StatusBadRequest, gin.H{
-							"error": "Bad Request. Did not find an auth value we expected",
+							"error": message,
 						})
 						c.Abort()
 						return
@@ -77,8 +90,11 @@ func middlewareCookieMonster() gin.HandlerFunc {
 					// Now check if it is an email ID
 					_, err = mail.ParseAddress(userID)
 					if err != nil {
+						message = fmt.Sprintf("Login Verification Error (POST request): Error parsing user ID: %s",
+							err.Error())
+						log.Printf("ERROR: LOGIN COOKIE ROUTER MIDDLEWARE: %s\n", message)
 						c.IndentedJSON(http.StatusBadRequest, gin.H{
-							"error": "Bad Request. An auth value we wanted was in an unexpected format",
+							"error": message,
 						})
 						c.Abort()
 						return
@@ -86,8 +102,11 @@ func middlewareCookieMonster() gin.HandlerFunc {
 
 					// FINALLY, now we can check the userID.
 					if userID != cookieValue {
+						message = fmt.Sprintf("Login Verification Error (POST request): User '%s' is not logged in",
+							userID)
+						log.Printf("ERROR: LOGIN COOKIE ROUTER MIDDLEWARE: %s\n", message)
 						c.IndentedJSON(http.StatusForbidden, gin.H{
-							"error": fmt.Sprintf("Forbidden, %s not logged in", userID),
+							"error": message,
 						})
 						c.Abort()
 						return
@@ -99,8 +118,11 @@ func middlewareCookieMonster() gin.HandlerFunc {
 					// Not POST, userID will be a URL-encoded query parameter having key handlers.UserIDQueryParamKey
 					if !c.Request.URL.Query().Has(handlers.UserIDQueryParamKey) {
 						// Any route where this is set as middleware MUST have the key.
+						message = fmt.Sprintf("Login Verification Error: Request URL Query Params do not contain User ID field: %s",
+							handlers.UserIDQueryParamKey)
+						log.Printf("ERROR: LOGIN COOKIE ROUTER MIDDLEWARE: %s\n", message)
 						c.IndentedJSON(http.StatusBadRequest, gin.H{
-							"error": "Bad Request. Did not find something we were expecting to find",
+							"error": message,
 						})
 						c.Abort()
 						return
@@ -110,8 +132,10 @@ func middlewareCookieMonster() gin.HandlerFunc {
 					userID := c.Request.URL.Query().Get(handlers.UserIDQueryParamKey)
 					userID, ok := ourutils.ValidateStringNotempty(userID)
 					if !ok {
+						message = fmt.Sprintf("Login Verification Error: User ID is missing or empty")
+						log.Printf("ERROR: LOGIN COOKIE ROUTER MIDDLEWARE: %s\n", message)
 						c.IndentedJSON(http.StatusBadRequest, gin.H{
-							"error": "Bad Request. Did not find a value we were expecting to find",
+							"error": message,
 						})
 						c.Abort()
 						return
@@ -119,8 +143,11 @@ func middlewareCookieMonster() gin.HandlerFunc {
 
 					// FINALLY, now we can check the userID.
 					if userID != cookieValue {
+						message = fmt.Sprintf("Login Verification Error: User '%s' is not logged in",
+							userID)
+						log.Printf("ERROR: LOGIN COOKIE ROUTER MIDDLEWARE: %s\n", message)
 						c.IndentedJSON(http.StatusForbidden, gin.H{
-							"error": fmt.Sprintf("Forbidden, %s not logged in", userID),
+							"error": message,
 						})
 						c.Abort()
 						return
@@ -133,9 +160,13 @@ func middlewareCookieMonster() gin.HandlerFunc {
 			}
 		}
 
-		// If we got here, Cookie verification failed.
-		c.IndentedJSON(http.StatusForbidden, gin.H{
-			"error": "Forbidden, you not logged in"})
+		// If we got here, Cookie verification failed, usually because there is no cookie.
+		// TODO When proper login is implemented, send a WWW-Authenticate header in the response.
+		message = "Login Verification Error: No user logged in, or failure verifying valid login session"
+		log.Printf("ERROR: LOGIN COOKIE ROUTER MIDDLEWARE: %s\n", message)
+		c.IndentedJSON(http.StatusUnauthorized, gin.H{
+			"error": message,
+		})
 		c.Abort()
 	}
 }
@@ -198,6 +229,7 @@ func NewRouter(rc RouterConfig) *gin.Engine {
 		//  - Allow users to delete themselves (GDPR!)
 		v1.POST("/register", handlers.AddUser)
 		v1.POST("/login", handlers.LoginUser)                            // Will set a cookie with the username.
+		v1.PUT("/logout", handlers.LogoutUser)                           // Deletes an existing login cookie.
 		v1.GET("/user", middlewareCookieMonster(), handlers.GetUserById) // Get our own info. Needs the cookie from login.
 
 		// Note APIs.

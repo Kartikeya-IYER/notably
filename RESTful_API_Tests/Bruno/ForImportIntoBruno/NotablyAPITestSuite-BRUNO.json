@@ -47,7 +47,7 @@
                     "name": "res.status",
                     "value": "eq 400",
                     "enabled": true,
-                    "uid": "BbOpjlfO6rzkCHa0tLAdR"
+                    "uid": "seYdLC8XtBzVfnQ4LlgPq"
                   }
                 ],
                 "tests": "test(\"NEGATIVE TEST: Empty username, blank password\", function() {\n  const data = res.getBody();\n  expect(res.getStatus()).to.equal(400);\n});\n\n",
@@ -91,7 +91,7 @@
                     "name": "res.status",
                     "value": "eq 400",
                     "enabled": true,
-                    "uid": "DQGTSSteJQGDfKn9NBxcL"
+                    "uid": "lTCZ4mzG0MPU6rEDfUM0o"
                   }
                 ],
                 "tests": "test(\"NEGATIVE TEST: Empty username, blank password\", function() {\n  const data = res.getBody();\n  expect(res.getStatus()).to.equal(400);\n});\n\n",
@@ -135,7 +135,7 @@
                     "name": "res.status",
                     "value": "eq 400",
                     "enabled": true,
-                    "uid": "UnSlBagwZi5cr0OyjB8p0"
+                    "uid": "1KBMVMlAeXYIFCAdeKjSb"
                   }
                 ],
                 "tests": "test(\"NEGATIVE TEST: Empty username, Non-blank valid password\", function() {\n  const data = res.getBody();\n  expect(res.getStatus()).to.equal(400);\n});\n\n",
@@ -179,7 +179,7 @@
                     "name": "res.status",
                     "value": "eq 201",
                     "enabled": true,
-                    "uid": "8M32piI6u8N4Hc20pfmSm"
+                    "uid": "oUQtJX3ZQkX1iemsCF2BH"
                   }
                 ],
                 "tests": "test(\"POSITIVE TEST: Valid username, Valid password\", function() {\n  const data = res.getBody();\n  expect(res.getStatus()).to.equal(201);\n});\n\n",
@@ -223,7 +223,7 @@
                     "name": "res.status",
                     "value": "eq 201",
                     "enabled": true,
-                    "uid": "JriWTCMngabaycbPevqmd"
+                    "uid": "OIL6RAsSQP7TFF3boMbXh"
                   }
                 ],
                 "tests": "test(\"POSITIVE TEST: Valid username, Valid password\", function() {\n  const data = res.getBody();\n  expect(res.getStatus()).to.equal(201);\n});\n\n",
@@ -267,7 +267,7 @@
                     "name": "res.status",
                     "value": "eq 404",
                     "enabled": true,
-                    "uid": "ccvvxS3KIP4edtecPXPbW"
+                    "uid": "xfdUuAVl8uDzzN1cRnTlM"
                   }
                 ],
                 "tests": "",
@@ -305,7 +305,7 @@
                     "name": "res.status",
                     "value": "eq 403",
                     "enabled": true,
-                    "uid": "q1FQpIa9Wn9Oa7DTEDHEb"
+                    "uid": "jFiBPwQyBOYz5QFbPYCyO"
                   }
                 ],
                 "tests": "",
@@ -343,7 +343,7 @@
                     "name": "res.status",
                     "value": "eq 200",
                     "enabled": true,
-                    "uid": "IEKh6yThkammCvwc2AT2W"
+                    "uid": "3rYMbTtLUDtPhVkBSorpY"
                   }
                 ],
                 "tests": "",
@@ -386,7 +386,7 @@
                     "name": "res.status",
                     "value": "eq 403",
                     "enabled": true,
-                    "uid": "QULeeRA5EdeUvuvtVfynX"
+                    "uid": "sSk5tKBA0rst5UKsn9Gtl"
                   }
                 ],
                 "tests": "",
@@ -429,7 +429,7 @@
                     "name": "res.status",
                     "value": "eq 200",
                     "enabled": true,
-                    "uid": "YvXg3IBYrXeTusqeXFzYl"
+                    "uid": "a8RpsszYgYsWsvlpYS0bb"
                   }
                 ],
                 "tests": "",
@@ -450,184 +450,6 @@
       "type": "folder",
       "name": "02-Note_Tests",
       "items": [
-        {
-          "type": "folder",
-          "name": "02-Read-SingleNoteForUser",
-          "items": [
-            {
-              "type": "http",
-              "name": "01-NEG-WrongUser",
-              "seq": 1,
-              "request": {
-                "url": "http://localhost:8080/api/v1/note/2gKlqjMJtK2BNTOV6ciEFKb6LND?userid=richardFeynman%40expired.com",
-                "method": "GET",
-                "headers": [],
-                "body": {
-                  "mode": "none",
-                  "formUrlEncoded": [],
-                  "multipartForm": []
-                },
-                "auth": {
-                  "mode": "none",
-                  "basic": {
-                    "username": "",
-                    "password": ""
-                  },
-                  "bearer": {
-                    "token": ""
-                  }
-                },
-                "script": {},
-                "vars": {},
-                "assertions": [
-                  {
-                    "name": "res.status",
-                    "value": "eq 404",
-                    "enabled": true,
-                    "uid": "0IwzMmJKWcsRZar5M3E8U"
-                  }
-                ],
-                "tests": "",
-                "query": [
-                  {
-                    "name": "userid",
-                    "value": "richardFeynman%40expired.com",
-                    "enabled": true
-                  }
-                ]
-              }
-            },
-            {
-              "type": "http",
-              "name": "02-NEG-NonexistentUser",
-              "seq": 2,
-              "request": {
-                "url": "http://localhost:8080/api/v1/note/abcdefgh?userid=noone@nowhere.biz",
-                "method": "GET",
-                "headers": [],
-                "body": {
-                  "mode": "none",
-                  "formUrlEncoded": [],
-                  "multipartForm": []
-                },
-                "auth": {
-                  "mode": "none",
-                  "basic": {
-                    "username": "",
-                    "password": ""
-                  },
-                  "bearer": {
-                    "token": ""
-                  }
-                },
-                "script": {},
-                "vars": {},
-                "assertions": [
-                  {
-                    "name": "res.status",
-                    "value": "eq 404",
-                    "enabled": true,
-                    "uid": "qXlmS7t8aTtXtIjkofWtM"
-                  }
-                ],
-                "tests": "",
-                "query": [
-                  {
-                    "name": "userid",
-                    "value": "noone@nowhere.biz",
-                    "enabled": true
-                  }
-                ]
-              }
-            },
-            {
-              "type": "http",
-              "name": "03-NEG-WrongNoteID",
-              "seq": 3,
-              "request": {
-                "url": "http://localhost:8080/api/v1/note/abcdefgh?userid=kartik%40somewhere.com",
-                "method": "GET",
-                "headers": [],
-                "body": {
-                  "mode": "none",
-                  "formUrlEncoded": [],
-                  "multipartForm": []
-                },
-                "auth": {
-                  "mode": "none",
-                  "basic": {
-                    "username": "",
-                    "password": ""
-                  },
-                  "bearer": {
-                    "token": ""
-                  }
-                },
-                "script": {},
-                "vars": {},
-                "assertions": [
-                  {
-                    "name": "res.status",
-                    "value": "eq 404",
-                    "enabled": true,
-                    "uid": "m3kEODoLoLoKChL4twat3"
-                  }
-                ],
-                "tests": "",
-                "query": [
-                  {
-                    "name": "userid",
-                    "value": "kartik%40somewhere.com",
-                    "enabled": true
-                  }
-                ]
-              }
-            },
-            {
-              "type": "http",
-              "name": "04-POSI-LoggedInUserAndValidNoteID",
-              "seq": 4,
-              "request": {
-                "url": "http://localhost:8080/api/v1/note/2gKlqjMJtK2BNTOV6ciEFKb6LND?userid=kartik%40somewhere.com",
-                "method": "GET",
-                "headers": [],
-                "body": {
-                  "mode": "none",
-                  "formUrlEncoded": [],
-                  "multipartForm": []
-                },
-                "auth": {
-                  "mode": "none",
-                  "basic": {
-                    "username": "",
-                    "password": ""
-                  },
-                  "bearer": {
-                    "token": ""
-                  }
-                },
-                "script": {},
-                "vars": {},
-                "assertions": [
-                  {
-                    "name": "res.status",
-                    "value": "eq 200",
-                    "enabled": true,
-                    "uid": "L31whnqiUulSRkpdGHIZJ"
-                  }
-                ],
-                "tests": "",
-                "query": [
-                  {
-                    "name": "userid",
-                    "value": "kartik%40somewhere.com",
-                    "enabled": true
-                  }
-                ]
-              }
-            }
-          ]
-        },
         {
           "type": "folder",
           "name": "01-Create",
@@ -661,9 +483,9 @@
                 "assertions": [
                   {
                     "name": "res.status",
-                    "value": "eq 400",
+                    "value": "eq 500",
                     "enabled": true,
-                    "uid": "qTkSbJJAzgiOzNkAtRhjH"
+                    "uid": "bRSV3Zp6kaBiojpHmL5D8"
                   }
                 ],
                 "tests": "",
@@ -701,7 +523,7 @@
                     "name": "res.status",
                     "value": "eq 400",
                     "enabled": true,
-                    "uid": "DpJ36XgYxBUCsUiO7oG1J"
+                    "uid": "lNlSyM0JYtTPA7PzlFsm5"
                   }
                 ],
                 "tests": "",
@@ -739,7 +561,7 @@
                     "name": "res.status",
                     "value": "eq 400",
                     "enabled": true,
-                    "uid": "Afid5onkAz33dZF49bNji"
+                    "uid": "YSH0vmV3JD7uHKMXL3yZ0"
                   }
                 ],
                 "tests": "",
@@ -777,7 +599,7 @@
                     "name": "res.status",
                     "value": "eq 400",
                     "enabled": true,
-                    "uid": "boWGwYM6Ic4i6jAngnXFz"
+                    "uid": "cDRvgGWJN2I4OeDhXuSyw"
                   }
                 ],
                 "tests": "",
@@ -815,7 +637,7 @@
                     "name": "res.status",
                     "value": "eq 400",
                     "enabled": true,
-                    "uid": "kSIyvdQAtkJ5tmQWsqb1i"
+                    "uid": "ONzrp3txRZ9UYufLW7mbS"
                   }
                 ],
                 "tests": "",
@@ -853,7 +675,7 @@
                     "name": "res.status",
                     "value": "eq 403",
                     "enabled": true,
-                    "uid": "SaS1yQhFYriNAq074lDD8"
+                    "uid": "o6bqXHtyHHC0TvnJh9zMk"
                   }
                 ],
                 "tests": "",
@@ -862,7 +684,7 @@
             },
             {
               "type": "http",
-              "name": "07-POSI-ValidRequest",
+              "name": "07-POSI-ValidNoteCreationRequest",
               "seq": 7,
               "request": {
                 "url": "http://localhost:8080/api/v1/note",
@@ -870,7 +692,7 @@
                 "headers": [],
                 "body": {
                   "mode": "json",
-                  "json": "{\n  \"user_id\": \"kartik@somewhere.com\",\n  \"note\": \"A THIRD note\"\n}",
+                  "json": "{\n  \"user_id\": \"kartik@somewhere.com\",\n  \"note\": \"A FIRST note\"\n}",
                   "formUrlEncoded": [],
                   "multipartForm": []
                 },
@@ -891,11 +713,189 @@
                     "name": "res.status",
                     "value": "eq 201",
                     "enabled": true,
-                    "uid": "4gh281lTDngOz49xim9pH"
+                    "uid": "dJRr1IK3Cb5xeHVNt11C8"
                   }
                 ],
                 "tests": "",
                 "query": []
+              }
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "02-Read-SingleNoteForUser",
+          "items": [
+            {
+              "type": "http",
+              "name": "01-NEG-WrongUser",
+              "seq": 1,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note/abcdefCHANGETHIS?userid=richardFeynman%40expired.com",
+                "method": "GET",
+                "headers": [],
+                "body": {
+                  "mode": "none",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 403",
+                    "enabled": true,
+                    "uid": "nPoDVivCm4cgr4tRBlBmz"
+                  }
+                ],
+                "tests": "",
+                "query": [
+                  {
+                    "name": "userid",
+                    "value": "richardFeynman%40expired.com",
+                    "enabled": true
+                  }
+                ]
+              }
+            },
+            {
+              "type": "http",
+              "name": "02-NEG-NonexistentUser",
+              "seq": 2,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note/abcdefCHANGETHIS?userid=noone@nowhere.biz",
+                "method": "GET",
+                "headers": [],
+                "body": {
+                  "mode": "none",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 403",
+                    "enabled": true,
+                    "uid": "ukXLnZhojIeRZ8jXy3Lcf"
+                  }
+                ],
+                "tests": "",
+                "query": [
+                  {
+                    "name": "userid",
+                    "value": "noone@nowhere.biz",
+                    "enabled": true
+                  }
+                ]
+              }
+            },
+            {
+              "type": "http",
+              "name": "03-NEG-WrongNoteID",
+              "seq": 3,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note/abcdefCHANGETHIS?userid=kartik%40somewhere.com",
+                "method": "GET",
+                "headers": [],
+                "body": {
+                  "mode": "none",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 404",
+                    "enabled": true,
+                    "uid": "dNuvIgESMONktWP89e8kx"
+                  }
+                ],
+                "tests": "",
+                "query": [
+                  {
+                    "name": "userid",
+                    "value": "kartik%40somewhere.com",
+                    "enabled": true
+                  }
+                ]
+              }
+            },
+            {
+              "type": "http",
+              "name": "04-POSI-VALIDNoteIDAndUser",
+              "seq": 4,
+              "request": {
+                "url": "http://localhost:8080/api/v1/note/abcdefCHANGETHIS?userid=kartik%40somewhere.com",
+                "method": "GET",
+                "headers": [],
+                "body": {
+                  "mode": "none",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "auth": {
+                  "mode": "none",
+                  "basic": {
+                    "username": "",
+                    "password": ""
+                  },
+                  "bearer": {
+                    "token": ""
+                  }
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [
+                  {
+                    "name": "res.status",
+                    "value": "eq 200",
+                    "enabled": true,
+                    "uid": "0Db53qz4WZNM8kz8N8XTO"
+                  }
+                ],
+                "tests": "",
+                "query": [
+                  {
+                    "name": "userid",
+                    "value": "kartik%40somewhere.com",
+                    "enabled": true
+                  }
+                ]
               }
             }
           ]
@@ -932,9 +932,9 @@
                 "assertions": [
                   {
                     "name": "res.status",
-                    "value": "eq 404",
+                    "value": "eq 403",
                     "enabled": true,
-                    "uid": "uUkbWebtJVoHhjkjJvVaM"
+                    "uid": "goUduVHhPMrcgavfBd9Ti"
                   }
                 ],
                 "tests": "",
@@ -975,9 +975,9 @@
                 "assertions": [
                   {
                     "name": "res.status",
-                    "value": "eq 404",
+                    "value": "eq 403",
                     "enabled": true,
-                    "uid": "p1cVHZsST9M04tBcR3RAX"
+                    "uid": "u0yi0ggHwT4bgB7OqNrZC"
                   }
                 ],
                 "tests": "",
@@ -1020,7 +1020,7 @@
                     "name": "res.status",
                     "value": "eq 200",
                     "enabled": true,
-                    "uid": "78JAmxkc4yWlPGhuwMZim"
+                    "uid": "jXQc1awEIFBxEzUQBPPt3"
                   }
                 ],
                 "tests": "",
@@ -1044,7 +1044,7 @@
               "name": "01-NEG-NoBody",
               "seq": 1,
               "request": {
-                "url": "http://localhost:8080/api/v1/note/2gJxbJMEmmOuTM6qprsI5LKB3fy",
+                "url": "http://localhost:8080/api/v1/note/abcdefCHANGETHIS",
                 "method": "POST",
                 "headers": [],
                 "body": {
@@ -1068,9 +1068,9 @@
                 "assertions": [
                   {
                     "name": "res.status",
-                    "value": "eq 400",
+                    "value": "eq 500",
                     "enabled": true,
-                    "uid": "pMa0KicOc8LLzsuEmfkX9"
+                    "uid": "bUJ0ypHPAWulGel7ctYsa"
                   }
                 ],
                 "tests": "",
@@ -1082,7 +1082,7 @@
               "name": "02-NEG-NoNoteField",
               "seq": 2,
               "request": {
-                "url": "http://localhost:8080/api/v1/note/2gJxbJMEmmOuTM6qprsI5LKB3fy",
+                "url": "http://localhost:8080/api/v1/note/abcdefCHANGETHIS",
                 "method": "POST",
                 "headers": [],
                 "body": {
@@ -1108,7 +1108,7 @@
                     "name": "res.status",
                     "value": "eq 400",
                     "enabled": true,
-                    "uid": "M1d1NVhO52SgmfqGegGSg"
+                    "uid": "AM8c6Pm0nVfZtU4kt8sgV"
                   }
                 ],
                 "tests": "",
@@ -1117,10 +1117,10 @@
             },
             {
               "type": "http",
-              "name": "03-NEG-EmptyNote",
+              "name": "03-NEG-EmptyNoteID",
               "seq": 3,
               "request": {
-                "url": "http://localhost:8080/api/v1/note/2gJxbJMEmmOuTM6qprsI5LKB3fy",
+                "url": "http://localhost:8080/api/v1/note/abcdefCHANGETHIS",
                 "method": "POST",
                 "headers": [],
                 "body": {
@@ -1146,7 +1146,7 @@
                     "name": "res.status",
                     "value": "eq 400",
                     "enabled": true,
-                    "uid": "EpoIremiDN9kYl0RS3jjU"
+                    "uid": "4hNyZlFJbdbsQAGm52AJr"
                   }
                 ],
                 "tests": "",
@@ -1158,7 +1158,7 @@
               "name": "04-NEG-NoUnameField",
               "seq": 4,
               "request": {
-                "url": "http://localhost:8080/api/v1/note/2gJxbJMEmmOuTM6qprsI5LKB3fy",
+                "url": "http://localhost:8080/api/v1/note/abcdefCHANGETHIS",
                 "method": "POST",
                 "headers": [],
                 "body": {
@@ -1184,7 +1184,7 @@
                     "name": "res.status",
                     "value": "eq 400",
                     "enabled": true,
-                    "uid": "j3CuyEN5MB6Y7ZGIuOj63"
+                    "uid": "M79ikbyqGzIowsv5sYaMu"
                   }
                 ],
                 "tests": "",
@@ -1196,7 +1196,7 @@
               "name": "05-NEG-EmptyUname",
               "seq": 5,
               "request": {
-                "url": "http://localhost:8080/api/v1/note/2gJxbJMEmmOuTM6qprsI5LKB3fy",
+                "url": "http://localhost:8080/api/v1/note/abcdefCHANGETHIS",
                 "method": "POST",
                 "headers": [],
                 "body": {
@@ -1222,7 +1222,7 @@
                     "name": "res.status",
                     "value": "eq 400",
                     "enabled": true,
-                    "uid": "nY92Ld8AXhNO1ypMGHpTV"
+                    "uid": "UgWy5hNRQkUEJzGZNwM7k"
                   }
                 ],
                 "tests": "",
@@ -1231,15 +1231,15 @@
             },
             {
               "type": "http",
-              "name": "06-POSI-ValidChangeNote",
+              "name": "06-POSI-VALIDNote-BODYandQPATH",
               "seq": 6,
               "request": {
-                "url": "http://localhost:8080/api/v1/note/2gKmYSek4qf5tZXME3PMhKcjKX8",
+                "url": "http://localhost:8080/api/v1/note/abcdefCHANGETHIS",
                 "method": "POST",
                 "headers": [],
                 "body": {
                   "mode": "json",
-                  "json": "{\n  \"id\": \"2gKmYSek4qf5tZXME3PMhKcjKX8\",\n  \"user_id\": \"kartik@somewhere.com\",\n  \"note\": \"a FIRST CHANGED note\"\n}",
+                  "json": "{\n  \"id\": \"abcdefCHANGETHIS\",\n  \"user_id\": \"kartik@somewhere.com\",\n  \"note\": \"a FIRST CHANGED note\"\n}",
                   "formUrlEncoded": [],
                   "multipartForm": []
                 },
@@ -1260,7 +1260,7 @@
                     "name": "res.status",
                     "value": "eq 200",
                     "enabled": true,
-                    "uid": "AUUZY5w5e3b10RUBHHLH3"
+                    "uid": "sCTOyxF8zs7J4uDiWFCA8"
                   }
                 ],
                 "tests": "",
@@ -1275,10 +1275,10 @@
           "items": [
             {
               "type": "http",
-              "name": "01-POSI-DeleteExisting",
+              "name": "01-POSI-DeleteExisting-IDEMPOTENT",
               "seq": 1,
               "request": {
-                "url": "http://localhost:8080/api/v1/note/abcdef?userid=kartik%40somewhere.com",
+                "url": "http://localhost:8080/api/v1/note/2gONR4RhVvUloG2RAE4pvU4nyjE?userid=kartik%40somewhere.com",
                 "method": "DELETE",
                 "headers": [],
                 "body": {
@@ -1303,50 +1303,7 @@
                     "name": "res.status",
                     "value": "eq 200",
                     "enabled": true,
-                    "uid": "qCupCKPbjowh5qUTN1tip"
-                  }
-                ],
-                "tests": "",
-                "query": [
-                  {
-                    "name": "userid",
-                    "value": "kartik%40somewhere.com",
-                    "enabled": true
-                  }
-                ]
-              }
-            },
-            {
-              "type": "http",
-              "name": "02-POSI-DeleteAGAIN",
-              "seq": 2,
-              "request": {
-                "url": "http://localhost:8080/api/v1/note/abcdef?userid=kartik%40somewhere.com",
-                "method": "DELETE",
-                "headers": [],
-                "body": {
-                  "mode": "none",
-                  "formUrlEncoded": [],
-                  "multipartForm": []
-                },
-                "auth": {
-                  "mode": "none",
-                  "basic": {
-                    "username": "",
-                    "password": ""
-                  },
-                  "bearer": {
-                    "token": ""
-                  }
-                },
-                "script": {},
-                "vars": {},
-                "assertions": [
-                  {
-                    "name": "res.status",
-                    "value": "eq 200",
-                    "enabled": true,
-                    "uid": "tyhkXBJeVspDpKeKodtXj"
+                    "uid": "Y09DCQp4WOse3bH3WlgqN"
                   }
                 ],
                 "tests": "",
@@ -1367,7 +1324,7 @@
           "items": [
             {
               "type": "http",
-              "name": "01-POSI-DeleteExisting",
+              "name": "01-POSI-DeleteAll-IDEMPOTENT",
               "seq": 1,
               "request": {
                 "url": "http://localhost:8080/api/v1/note?userid=kartik%40somewhere.com",
@@ -1395,50 +1352,7 @@
                     "name": "res.status",
                     "value": "eq 200",
                     "enabled": true,
-                    "uid": "WX3mE07pca7NvjBRpgpIr"
-                  }
-                ],
-                "tests": "",
-                "query": [
-                  {
-                    "name": "userid",
-                    "value": "kartik%40somewhere.com",
-                    "enabled": true
-                  }
-                ]
-              }
-            },
-            {
-              "type": "http",
-              "name": "02-POSI-DeleteAGAIN",
-              "seq": 2,
-              "request": {
-                "url": "http://localhost:8080/api/v1/note?userid=kartik%40somewhere.com",
-                "method": "DELETE",
-                "headers": [],
-                "body": {
-                  "mode": "none",
-                  "formUrlEncoded": [],
-                  "multipartForm": []
-                },
-                "auth": {
-                  "mode": "none",
-                  "basic": {
-                    "username": "",
-                    "password": ""
-                  },
-                  "bearer": {
-                    "token": ""
-                  }
-                },
-                "script": {},
-                "vars": {},
-                "assertions": [
-                  {
-                    "name": "res.status",
-                    "value": "eq 200",
-                    "enabled": true,
-                    "uid": "1cb0Hgh5rDadiMPgrIrKg"
+                    "uid": "YjCAtfHRjS0jhnsHvnJ3F"
                   }
                 ],
                 "tests": "",
@@ -1452,6 +1366,86 @@
               }
             }
           ]
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "name": "99-Logout-RUN_THIS_LAST",
+      "items": [
+        {
+          "type": "http",
+          "name": "01-POS-ValidLoggedInUser",
+          "seq": 1,
+          "request": {
+            "url": "http://localhost:8080/api/v1/logout",
+            "method": "PUT",
+            "headers": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": []
+            },
+            "auth": {
+              "mode": "none",
+              "basic": {
+                "username": "",
+                "password": ""
+              },
+              "bearer": {
+                "token": ""
+              }
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [
+              {
+                "name": "res.status",
+                "value": "eq 200",
+                "enabled": true,
+                "uid": "OqLbGWkCkLNXBzlWPokY4"
+              }
+            ],
+            "tests": "",
+            "query": []
+          }
+        },
+        {
+          "type": "http",
+          "name": "02-NEG-NoUserLoggedIn",
+          "seq": 2,
+          "request": {
+            "url": "http://localhost:8080/api/v1/logout",
+            "method": "PUT",
+            "headers": [],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": []
+            },
+            "auth": {
+              "mode": "none",
+              "basic": {
+                "username": "",
+                "password": ""
+              },
+              "bearer": {
+                "token": ""
+              }
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [
+              {
+                "name": "res.status",
+                "value": "eq 401",
+                "enabled": true,
+                "uid": "oWxFqmplj5gXGqz1tL0S2"
+              }
+            ],
+            "tests": "",
+            "query": []
+          }
         }
       ]
     }

@@ -290,47 +290,6 @@
       "name": "02-Note_Tests",
       "item": [
         {
-          "name": "02-Read-SingleNoteForUser",
-          "item": [
-            {
-              "name": "01-NEG-WrongUser",
-              "event": [],
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": "http://localhost:8080/api/v1/note/2gKlqjMJtK2BNTOV6ciEFKb6LND?userid=richardFeynman%40expired.com"
-              }
-            },
-            {
-              "name": "02-NEG-NonexistentUser",
-              "event": [],
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": "http://localhost:8080/api/v1/note/abcdefgh?userid=noone@nowhere.biz"
-              }
-            },
-            {
-              "name": "03-NEG-WrongNoteID",
-              "event": [],
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": "http://localhost:8080/api/v1/note/abcdefgh?userid=kartik%40somewhere.com"
-              }
-            },
-            {
-              "name": "04-POSI-LoggedInUserAndValidNoteID",
-              "event": [],
-              "request": {
-                "method": "GET",
-                "header": [],
-                "url": "http://localhost:8080/api/v1/note/2gKlqjMJtK2BNTOV6ciEFKb6LND?userid=kartik%40somewhere.com"
-              }
-            }
-          ]
-        },
-        {
           "name": "01-Create",
           "item": [
             {
@@ -433,7 +392,7 @@
               }
             },
             {
-              "name": "07-POSI-ValidRequest",
+              "name": "07-POSI-ValidNoteCreationRequest",
               "event": [],
               "request": {
                 "method": "POST",
@@ -441,13 +400,54 @@
                 "url": "http://localhost:8080/api/v1/note",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"user_id\": \"kartik@somewhere.com\",\n  \"note\": \"A THIRD note\"\n}",
+                  "raw": "{\n  \"user_id\": \"kartik@somewhere.com\",\n  \"note\": \"A FIRST note\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
                     }
                   }
                 }
+              }
+            }
+          ]
+        },
+        {
+          "name": "02-Read-SingleNoteForUser",
+          "item": [
+            {
+              "name": "01-NEG-WrongUser",
+              "event": [],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note/abcdefCHANGETHIS?userid=richardFeynman%40expired.com"
+              }
+            },
+            {
+              "name": "02-NEG-NonexistentUser",
+              "event": [],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note/abcdefCHANGETHIS?userid=noone@nowhere.biz"
+              }
+            },
+            {
+              "name": "03-NEG-WrongNoteID",
+              "event": [],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note/abcdefCHANGETHIS?userid=kartik%40somewhere.com"
+              }
+            },
+            {
+              "name": "04-POSI-VALIDNoteIDAndUser",
+              "event": [],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "http://localhost:8080/api/v1/note/abcdefCHANGETHIS?userid=kartik%40somewhere.com"
               }
             }
           ]
@@ -493,7 +493,7 @@
               "request": {
                 "method": "POST",
                 "header": [],
-                "url": "http://localhost:8080/api/v1/note/2gJxbJMEmmOuTM6qprsI5LKB3fy"
+                "url": "http://localhost:8080/api/v1/note/abcdefCHANGETHIS"
               }
             },
             {
@@ -502,7 +502,7 @@
               "request": {
                 "method": "POST",
                 "header": [],
-                "url": "http://localhost:8080/api/v1/note/2gJxbJMEmmOuTM6qprsI5LKB3fy",
+                "url": "http://localhost:8080/api/v1/note/abcdefCHANGETHIS",
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"user_id\": \"kartik@somewhere.com\"\n}",
@@ -515,12 +515,12 @@
               }
             },
             {
-              "name": "03-NEG-EmptyNote",
+              "name": "03-NEG-EmptyNoteID",
               "event": [],
               "request": {
                 "method": "POST",
                 "header": [],
-                "url": "http://localhost:8080/api/v1/note/2gJxbJMEmmOuTM6qprsI5LKB3fy",
+                "url": "http://localhost:8080/api/v1/note/abcdefCHANGETHIS",
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"user_id\": \"kartik@somewhere.com\",\n  \"note\": \"\"\n}",
@@ -538,7 +538,7 @@
               "request": {
                 "method": "POST",
                 "header": [],
-                "url": "http://localhost:8080/api/v1/note/2gJxbJMEmmOuTM6qprsI5LKB3fy",
+                "url": "http://localhost:8080/api/v1/note/abcdefCHANGETHIS",
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"note\": \"a note\"\n}",
@@ -556,7 +556,7 @@
               "request": {
                 "method": "POST",
                 "header": [],
-                "url": "http://localhost:8080/api/v1/note/2gJxbJMEmmOuTM6qprsI5LKB3fy",
+                "url": "http://localhost:8080/api/v1/note/abcdefCHANGETHIS",
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"user_id\": \"   \",\n  \"note\": \"a note\"\n}",
@@ -569,15 +569,15 @@
               }
             },
             {
-              "name": "06-POSI-ValidChangeNote",
+              "name": "06-POSI-VALIDNote-BODYandQPATH",
               "event": [],
               "request": {
                 "method": "POST",
                 "header": [],
-                "url": "http://localhost:8080/api/v1/note/2gKmYSek4qf5tZXME3PMhKcjKX8",
+                "url": "http://localhost:8080/api/v1/note/abcdefCHANGETHIS",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"id\": \"2gKmYSek4qf5tZXME3PMhKcjKX8\",\n  \"user_id\": \"kartik@somewhere.com\",\n  \"note\": \"a FIRST CHANGED note\"\n}",
+                  "raw": "{\n  \"id\": \"abcdefCHANGETHIS\",\n  \"user_id\": \"kartik@somewhere.com\",\n  \"note\": \"a FIRST CHANGED note\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -592,21 +592,12 @@
           "name": "05-Delete-SingleNoteForUser",
           "item": [
             {
-              "name": "01-POSI-DeleteExisting",
+              "name": "01-POSI-DeleteExisting-IDEMPOTENT",
               "event": [],
               "request": {
                 "method": "DELETE",
                 "header": [],
-                "url": "http://localhost:8080/api/v1/note/abcdef?userid=kartik%40somewhere.com"
-              }
-            },
-            {
-              "name": "02-POSI-DeleteAGAIN",
-              "event": [],
-              "request": {
-                "method": "DELETE",
-                "header": [],
-                "url": "http://localhost:8080/api/v1/note/abcdef?userid=kartik%40somewhere.com"
+                "url": "http://localhost:8080/api/v1/note/2gONR4RhVvUloG2RAE4pvU4nyjE?userid=kartik%40somewhere.com"
               }
             }
           ]
@@ -615,16 +606,7 @@
           "name": "06-Delete-AllNotesForUser",
           "item": [
             {
-              "name": "01-POSI-DeleteExisting",
-              "event": [],
-              "request": {
-                "method": "DELETE",
-                "header": [],
-                "url": "http://localhost:8080/api/v1/note?userid=kartik%40somewhere.com"
-              }
-            },
-            {
-              "name": "02-POSI-DeleteAGAIN",
+              "name": "01-POSI-DeleteAll-IDEMPOTENT",
               "event": [],
               "request": {
                 "method": "DELETE",
@@ -633,6 +615,29 @@
               }
             }
           ]
+        }
+      ]
+    },
+    {
+      "name": "99-Logout-RUN_THIS_LAST",
+      "item": [
+        {
+          "name": "01-POS-ValidLoggedInUser",
+          "event": [],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": "http://localhost:8080/api/v1/logout"
+          }
+        },
+        {
+          "name": "02-NEG-NoUserLoggedIn",
+          "event": [],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": "http://localhost:8080/api/v1/logout"
+          }
         }
       ]
     }

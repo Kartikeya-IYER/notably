@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"net/mail"
 
@@ -18,7 +19,7 @@ import (
 
 // There's going to be a lot of duplicated logic here, and I can't think of a good
 // way to refactor it to remove the copypastas, because these are request handlers
-// and hence are independent.
+// and hence are independent. TODO: More research to investigate and remove copypastas.
 
 // Registers a new user.
 // Uses POST with the following items in the POST body:
@@ -36,7 +37,7 @@ func AddUser(c *gin.Context) {
 		message = "Potentially malformed POST body."
 		message += " Please ensure that the body is valid JSON and contains all relevant fields ('id', 'password')."
 		message += fmt.Sprintf(" Error: %s", err.Error())
-
+		log.Printf("ERROR: REGISTER/ADD USER: %s\n", message)
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": message})
 		return
 	}
@@ -48,6 +49,7 @@ func AddUser(c *gin.Context) {
 	userID, ok := ourutils.ValidateStringNotempty(userID)
 	if !ok {
 		message = "Request 'id' field is empty or blank"
+		log.Printf("ERROR: REGISTER/ADD USER: %s\n", message)
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": message})
 		return
 	}
@@ -56,6 +58,7 @@ func AddUser(c *gin.Context) {
 	_, err := mail.ParseAddress(userID)
 	if err != nil {
 		message = "Request 'id' field does not appear to be a valid email address"
+		log.Printf("ERROR: REGISTER/ADD USER: %s\n", message)
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": message})
 		return
 	}
@@ -63,6 +66,7 @@ func AddUser(c *gin.Context) {
 	plaintextPassword, ok = ourutils.ValidateStringNotempty(plaintextPassword)
 	if !ok {
 		message = "Request 'password' field is empty or blank"
+		log.Printf("ERROR: REGISTER/ADD USER: %s\n", message)
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": message})
 		return
 	}
@@ -71,6 +75,7 @@ func AddUser(c *gin.Context) {
 	hashedPassword, ok = ourutils.ValidateStringNotempty(hashedPassword)
 	if !ok {
 		message = "Failed to hash Request 'password' field"
+		log.Printf("ERROR: REGISTER/ADD USER: %s\n", message)
 		c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": message})
 		return
 	}
@@ -88,6 +93,7 @@ func AddUser(c *gin.Context) {
 			respErr = http.StatusConflict
 		}
 
+		log.Printf("ERROR: REGISTER/ADD USER: %s\n", err.Error())
 		c.IndentedJSON(respErr, gin.H{"error": err.Error()})
 		return
 	}
@@ -100,6 +106,7 @@ func AddUser(c *gin.Context) {
 	respData, err := json.Marshal(aUser)
 	if err != nil {
 		message := fmt.Sprintf("Error marshalling model user to JSON: %s", err.Error())
+		log.Printf("ERROR: REGISTER/ADD USER: %s\n", message)
 		c.IndentedJSON(http.StatusNotFound, gin.H{"error": message})
 		return
 	}
@@ -123,11 +130,14 @@ func LoginUser(c *gin.Context) {
 	var reqUser model.RequestUser
 	var message string
 
+	// NOTE: The Login backend MUST be idenpotent. See LogoutUser() below.
+
 	// Get the body into the REQUEST DTO
 	if err := c.BindJSON(&reqUser); err != nil {
 		message = "Potentially malformed POST body."
 		message += " Please ensure that the body is valid JSON and contains all relevant fields ('id', 'password')."
 		message += fmt.Sprintf(" Error: %s", err.Error())
+		log.Printf("ERROR: LOGIN USER: %s\n", message)
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": message})
 		return
 	}
@@ -138,7 +148,8 @@ func LoginUser(c *gin.Context) {
 
 	userID, ok := ourutils.ValidateStringNotempty(userID)
 	if !ok {
-		message = "Request 'id' field is empty or blank"
+		message = fmt.Sprintf("Request 'id' field is empty or blank when logging in user '%s'", userID)
+		log.Printf("ERROR: LOGIN USER: %s\n", message)
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": message})
 		return
 	}
@@ -146,14 +157,17 @@ func LoginUser(c *gin.Context) {
 	// Now validate that the userID is a proper email address
 	_, err := mail.ParseAddress(userID)
 	if err != nil {
-		message = "Request 'id' field does not appear to be a valid email address"
+		message = fmt.Sprintf("Request 'id' field does not appear to be a valid email address when logging in user '%s'",
+			userID)
+		log.Printf("ERROR: LOGIN USER: %s\n", message)
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": message})
 		return
 	}
 
 	plaintextPassword, ok = ourutils.ValidateStringNotempty(plaintextPassword)
 	if !ok {
-		message = "Request 'password' field is empty or blank"
+		message = fmt.Sprintf("Request 'password' field is empty or blank when logging in user '%s'", userID)
+		log.Printf("ERROR: LOGIN USER: %s\n", message)
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": message})
 		return
 	}
@@ -162,7 +176,8 @@ func LoginUser(c *gin.Context) {
 	// Trust, but verify ;-)
 	hashedPassword, ok = ourutils.ValidateStringNotempty(hashedPassword)
 	if !ok {
-		message = "Failed to hash Request 'password' field"
+		message = fmt.Sprintf("Failed to hash Request 'password' field when logging in user '%s'", userID)
+		log.Printf("ERROR: LOGIN USER: %s\n", message)
 		c.IndentedJSON(http.StatusUnprocessableEntity, gin.H{"error": message})
 		return
 	}
@@ -180,6 +195,7 @@ func LoginUser(c *gin.Context) {
 			respErr = http.StatusNotFound
 		}
 
+		log.Printf("ERROR: LOGIN USER: %s\n", err.Error())
 		c.IndentedJSON(respErr, gin.H{"error": err.Error()})
 		return
 	}
@@ -188,7 +204,8 @@ func LoginUser(c *gin.Context) {
 	aUserID := aUser.UserID
 	aUserHashedPassword := aUser.PasswordHash
 	if aUserID != userID || aUserHashedPassword != hashedPassword {
-		message = "Forbidden. Terminating login due to user verification failure"
+		message = fmt.Sprintf("Forbidden. Terminating login due to user verification failure for user '%s'", userID)
+		log.Printf("ERROR: LOGIN USER: %s\n", message)
 		c.IndentedJSON(http.StatusForbidden, gin.H{"error": message})
 		return
 	}
@@ -208,8 +225,53 @@ func LoginUser(c *gin.Context) {
 
 	c.SetCookie(LoginCookieName, aUserID, loginCookieMaxAgeSecs, "/", "localhost", false, true)
 
-	message = fmt.Sprintf("OK, user %s logged in", userID)
+	message = fmt.Sprintf("OK, user '%s' logged in", userID)
 	c.IndentedJSON(http.StatusOK, gin.H{"message": message})
+}
+
+// This is a PUT handler.
+func LogoutUser(c *gin.Context) {
+	cookieValue, err := c.Cookie(LoginCookieName)
+	if err != nil {
+		if err == http.ErrNoCookie {
+			// TODO When proper login is implemented, send a WWW-Authenticate header in the response.
+			message := "No valid logged-in user found"
+			log.Printf("ERROR: LOGOUT USER: %s\n", message)
+			c.IndentedJSON(http.StatusUnauthorized, gin.H{
+				"error": message,
+			})
+		} else {
+			// Uh oh. What happened here?
+			// We really the IETF to specify more 5xx errors in the RFC 9110 standard.
+			message := fmt.Sprintf("logout failed because %s", err.Error())
+			log.Printf("ERROR: LOGOUT USER: %s\n", message)
+			c.IndentedJSON(http.StatusInternalServerError, gin.H{
+				"error": fmt.Sprintf("logout failed because %s", message),
+			})
+		}
+
+		return
+	}
+
+	if cookieValue == "" {
+		// Indicates that the user is already logged out.
+		// If the user is actually logged in and this happens, the cookie might have expired.
+		// BUT if their session actually active (i.e. NOT auto-expired), they may log in again
+		// on seeing this response.
+		// Therefore, the Login functionality MUST be idempotent.
+		message := "Already logged out or session has expired"
+		log.Printf("WARNING: LOGOUT USER: %s\n", message)
+		c.IndentedJSON(http.StatusOK, gin.H{
+			"message": message,
+		})
+		return
+	}
+
+	// "Delete" the login cookie. This is done by expiring the cookie and setting it to contain an empty value.
+	c.SetCookie(LoginCookieName, "", -1, "/", "localhost", false, true)
+	c.IndentedJSON(http.StatusOK, gin.H{
+		"message": fmt.Sprintf("user '%s' has been logged out", cookieValue),
+	})
 }
 
 // For a logged-in user, shows that user their own details (the password hash is redacted).
@@ -220,8 +282,10 @@ func LoginUser(c *gin.Context) {
 func GetUserById(c *gin.Context) {
 	if !c.Request.URL.Query().Has(UserIDQueryParamKey) {
 		// Any route where this is set as middleware MUST have the key.
+		message := "Bad Request. Did not find the user ID key in the query params"
+		log.Printf("ERROR: GET USER: %s\n", message)
 		c.IndentedJSON(http.StatusBadRequest, gin.H{
-			"error": "Bad Request. Did not find the user ID key in the query params",
+			"error": message,
 		})
 		return
 	}
@@ -230,8 +294,10 @@ func GetUserById(c *gin.Context) {
 	userID := c.Request.URL.Query().Get(UserIDQueryParamKey)
 	userID, ok := ourutils.ValidateStringNotempty(userID)
 	if !ok {
+		message := "Bad Request. User ID value in the query params was empty"
+		log.Printf("ERROR: GET USER: %s\n", message)
 		c.IndentedJSON(http.StatusBadRequest, gin.H{
-			"error": "Bad Request. User ID value in the query params was empty",
+			"error": message,
 		})
 		return
 	}
@@ -246,12 +312,14 @@ func GetUserById(c *gin.Context) {
 			respErr = http.StatusNotFound
 		}
 
+		log.Printf("ERROR: GET USER: %s\n", err.Error())
 		c.IndentedJSON(respErr, gin.H{"error": err.Error()})
 		return
 	}
 	if aUser.UserID != userID {
 		// Hmmm...how did this happen? At any rate, we need to set a 404
 		message := fmt.Sprintf("User '%s' not found", userID)
+		log.Printf("ERROR: GET USER: %s\n", message)
 		c.IndentedJSON(http.StatusNotFound, gin.H{"error": message})
 		return
 	}
@@ -263,6 +331,7 @@ func GetUserById(c *gin.Context) {
 	respData, err := json.Marshal(aUser)
 	if err != nil {
 		message := fmt.Sprintf("Error marshalling model user to JSON: %s", err.Error())
+		log.Printf("ERROR: GET USER: %s\n", message)
 		c.IndentedJSON(http.StatusNotFound, gin.H{"error": message})
 		return
 	}
