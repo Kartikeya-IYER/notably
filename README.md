@@ -61,7 +61,9 @@ Notably, since this is a backend API, it doesn't have a Web GUI/frontend. Howeve
     4. Run the `go build` command to build the HTTP server/router binary. The binary will be named `notablyd`
     5. To run the built HTTP server/router binary, simply invoke it with no command line parameters.
 
-**Caveat Emptor:** the Notes right now have to be plain text and must be valid JSON text. If you want mult-line Notes, use `\n` in the Note text so that it is still valid JSON. Also see the `TODOs` section below.
+**Caveat Emptor:** the Notes right now have to be plain text and must be valid JSON text. If you want mult-line Notes, use `\n` in the Note text so that it is still valid JSON.
+
+Also see the `TODOs` section below.
 
 --------------------------------------------
 
@@ -152,20 +154,7 @@ Although this is just a PoC / learning project, it can most definitely be improv
 
 Here is what I have on the agenda - in rough order of priority - as regards further improvements. Pull requests are welcome!
 
-- Better support for the Notes themselves: Allow Notes in any format and not just notes that have to be valid JSON.
-    - One way to achieve this would be to encode the Note in Base-62 in the client at the time of creation.
-- Customizable configuration using config files.
-- Proper logging with a level-aware logger (Either the standard library's `log/slog` package, or [Uber Zap](https://github.com/uber-go/zap)) with log rotation ([Lumberjack](https://github.com/natefinch/lumberjack)).
-- [ULIDs](https://github.com/oklog/ulid) :-)
-- Proper Security:
-    - User auth with session token for all REST calls.
-    - HTTPS endpoints, using certificates that are NOT self-signed.
-- Admin user to administer system:
-    - List, modify, and delete users other than ourselves
-    - List, modify, and delete notes for users other than ourselves
-    - Transfer notes between users (this could also be a user-level "share" functionality
-- More user functionality (update, delete, registration with email address validation, etc).
-- Use a proper RDBMS instead of go-memdb. This allows us to do things like:
+- Use a proper RDBMS instead of `go-memdb`. This allows us to do things like:
     - Have the "D" in ["ACID"](https://en.wikipedia.org/wiki/ACID).
     - The goodness that comes with using a real database:
       - SQL support with all the goodness that brings:
@@ -176,6 +165,19 @@ Here is what I have on the agenda - in rough order of priority - as regards furt
       - DB triggers if needed.
      - Note that we could choose instead to use a [NoSQL Document Store](https://en.wikipedia.org/wiki/ACID).
        - If we did this, we would lose the RDBMS goodness and would have to implement some or all of that functionality ourselves.
+- Proper Security:
+    - User auth with session token for all REST calls.
+    - HTTPS endpoints, using certificates that are NOT self-signed.
+- Admin user to administer system:
+    - List, modify, and delete users other than ourselves
+    - List, modify, and delete notes for users other than ourselves
+    - Transfer notes between users (this could also be a user-level "share" functionality
+- More user functionality (update, delete, registration with email address validation, etc).
+- Better support for the Notes themselves: Allow Notes in any format and not just notes that have to be valid JSON.
+    - One way to achieve this would be to encode the Note in Base-62 in the client at the time of creation.
+- Customizable configuration using config files.
+- Proper logging with a level-aware logger (Either the standard library's `log/slog` package, or [Uber Zap](https://github.com/uber-go/zap)) with log rotation ([Lumberjack](https://github.com/natefinch/lumberjack)).
+- [ULIDs](https://github.com/oklog/ulid) :-)
 - Provide a mechanism to make it eas[y|ier] to switch persistence backends
 - A front-end web GUI _("For the love of God, Montresor!", to quote Fortunato's fervent plea in Edgar Allan Poe's story "The Cask of Amontillado")_
 - You tell me! Or better yet, submit a pull request :-)
