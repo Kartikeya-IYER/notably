@@ -169,7 +169,7 @@ func GetOrDeleteNoteByNoteIDForUser(c *gin.Context) {
 		// get rid of this copypasta. It offends my sensibilities.
 		respData, err := json.Marshal(aNote)
 		if err != nil {
-			message := fmt.Sprintf("Error getting note for user '%s': %s", err.Error())
+			message := fmt.Sprintf("Error getting note for user '%s': %s", userID, err.Error())
 			log.Printf("ERROR: GET NOTE: %s", message)
 			c.IndentedJSON(http.StatusInternalServerError, gin.H{
 				"error": message,
@@ -228,7 +228,7 @@ func GetOrDeleteAllNotesForUser(c *gin.Context) {
 		numDeleted, err = db.DeleteAllNotesForUser(userID)
 	}
 	if err != nil {
-		message := fmt.Sprintf("Error %s all notes for user '%s': %s", userID, err.Error())
+		message := fmt.Sprintf("Error %s all notes for user '%s': %s", reqMethod, userID, err.Error())
 		log.Printf("ERROR: %s ALL NOTES: %s\n", reqMethod, message)
 		c.IndentedJSON(http.StatusBadRequest, gin.H{
 			"error": message,

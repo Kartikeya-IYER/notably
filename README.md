@@ -57,7 +57,7 @@ Notably, since this is a backend API, it doesn't have a Web GUI/frontend. Howeve
     - Building the source:
     1. Clone the project from GitHub into some directory on your machine. Then navigate to the directory where you cloned it.
     2. (Optional but recommended, especially if you modify the source): Run the unit tests: ` go test ./... -test.v`
-    3. Navigate to the `cmd --> notably` directory
+    3. Navigate to the `cmd --> notablyd` directory
     4. Run the `go build` command to build the HTTP server/router binary. The binary will be named `notablyd`
     5. To run the built HTTP server/router binary, simply invoke it with no command line parameters.
 
