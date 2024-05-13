@@ -26,7 +26,7 @@ Notably, since this is a backend API, it doesn't have a Web GUI/frontend. Howeve
     - KSUIDs are Base-62 which means that they are safe to use as-is in URLs.
     - And literally as I was writing this, I stumbled upon [ULIDs](https://github.com/oklog/ulid) which seem to be even cooler than KSUIDs. I will probably give this a Go _(heh heh)_ in the next code rev.
 - API Client for testing: [Bruno](https://github.com/usebruno/bruno)
-    - Another find made in the past week, Bruno is a completely and totally offline API testing client with a simple IDE.
+    - Another find made during the week that I started (and finished) this project, Bruno is a completely and totally offline API testing client with a simple IDE.
     - API tests can be defined, configured, and run via the GUI; there is even an inbilt test script console (Javascript) to run additional little snippets.
     - It's a little rough around the edges, but the fact that it installs and runs locally and isn't cloud-based like `Postman`, `Insomnia` and others of their ilk buys it a lot of goodwill from me.
     - This repository includes the Bruno test configs, in three separate forms:
