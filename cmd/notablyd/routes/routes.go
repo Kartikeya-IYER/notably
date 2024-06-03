@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"net/mail"
@@ -17,7 +16,8 @@ import (
 	ourutils "notably/internal/utils"
 )
 
-// Router middleware which handles checking whether the request user has a valid login/session cookie.
+// middlewareCookieMonster is router middleware which handles checking whether the
+// request user has a valid login/session cookie.
 func middlewareCookieMonster() gin.HandlerFunc {
 	log.Println("Setting up the middleware cookie monster (om nom nom nom)...")
 	return func(c *gin.Context) {
@@ -70,7 +70,7 @@ func middlewareCookieMonster() gin.HandlerFunc {
 					// either 'id' (RequestUser DTO) or 'user_id' (RequestNote DTO)
 					if bodyMap["user_id"] != nil {
 						userID = bodyMap["user_id"].(string) // type assertion needed because interface{}
-					} else if bodyMap["user_id"] != nil {
+					} else if bodyMap["id"] != nil {
 						// we'll erroneously reach this case if a note-related request was
 						// missing the user_id field. But we'll check to see if it is an
 						// email ID, so no worries.
@@ -79,7 +79,7 @@ func middlewareCookieMonster() gin.HandlerFunc {
 
 					userID, ok := ourutils.ValidateStringNotempty(userID)
 					if !ok {
-						message = fmt.Sprintf("Login Verification Error (POST request): User ID is missing or empty")
+						message = "Login Verification Error (POST request): User ID is missing or empty"
 						log.Printf("ERROR: LOGIN COOKIE ROUTER MIDDLEWARE: %s\n", message)
 						c.IndentedJSON(http.StatusBadRequest, gin.H{
 							"error": message,
@@ -113,7 +113,7 @@ func middlewareCookieMonster() gin.HandlerFunc {
 					}
 
 					// Replace the body - without this, the request EOFs when parsing the body.
-					c.Request.Body = ioutil.NopCloser(bytes.NewReader(bodyData))
+					c.Request.Body = io.NopCloser(bytes.NewReader(bodyData))
 				} else {
 					// Not POST, userID will be a URL-encoded query parameter having key handlers.UserIDQueryParamKey
 					if !c.Request.URL.Query().Has(handlers.UserIDQueryParamKey) {
@@ -132,7 +132,7 @@ func middlewareCookieMonster() gin.HandlerFunc {
 					userID := c.Request.URL.Query().Get(handlers.UserIDQueryParamKey)
 					userID, ok := ourutils.ValidateStringNotempty(userID)
 					if !ok {
-						message = fmt.Sprintf("Login Verification Error: User ID is missing or empty")
+						message = "Login Verification Error: User ID is missing or empty"
 						log.Printf("ERROR: LOGIN COOKIE ROUTER MIDDLEWARE: %s\n", message)
 						c.IndentedJSON(http.StatusBadRequest, gin.H{
 							"error": message,
@@ -171,7 +171,7 @@ func middlewareCookieMonster() gin.HandlerFunc {
 	}
 }
 
-// Router middleware which sets up the DB connection to pass to route handlers.
+// middlewareSetupRouter is middleware which sets up the DB connection to pass to route handlers.
 // Also passes the max age (in seconds) of the login session cookie which gets
 // set on a successful login.
 func middlewareSetupRouter(rc RouterConfig) gin.HandlerFunc {
@@ -202,6 +202,7 @@ func middlewareSetupRouter(rc RouterConfig) gin.HandlerFunc {
 	}
 }
 
+// NewRouter creates a new Gin router.
 func NewRouter(rc RouterConfig) *gin.Engine {
 	log.Println("Creating router...")
 	r := gin.Default()

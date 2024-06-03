@@ -19,19 +19,19 @@ func (db *NotablyDB) AddUser(userID, passwordHash string) (*model.User, error) {
 	// Sanity checks
 	userID, ok := ourutils.ValidateStringNotempty(userID)
 	if !ok {
-		return nil, errors.New("Cannot add user because userID is empty/blank")
+		return nil, errors.New("cannot add user because userID is empty/blank")
 	}
 
 	passwordHash, ok = ourutils.ValidateStringNotempty(passwordHash)
 	if !ok {
-		return nil, errors.New("Cannot add user because password hash is empty/blank")
+		return nil, errors.New("cannot add user because password hash is empty/blank")
 	}
 
 	// Check whether user already exists
 	_, err := db.GetUserByID(userID)
 	if err == nil {
 		// Uh oh...
-		return nil, fmt.Errorf("User '%s' already exists", userID)
+		return nil, fmt.Errorf("user '%s' already exists", userID)
 	}
 
 	// Set the creation timestamp to  the current time, as seconds after Unix epoch
@@ -42,7 +42,7 @@ func (db *NotablyDB) AddUser(userID, passwordHash string) (*model.User, error) {
 	err = txn.Insert(usersTableName, user)
 	if err != nil {
 		txn.Abort() // go-memdb should have called this method Rollback() to be in line with database/sql. Oh well.
-		return nil, fmt.Errorf("Failed adding user '%s': %s", userID, err.Error())
+		return nil, fmt.Errorf("failed adding user '%s': %s", userID, err.Error())
 	}
 
 	txn.Commit()
@@ -53,7 +53,7 @@ func (db *NotablyDB) GetUserByID(userID string) (*model.User, error) {
 	// Sanity checks
 	userID, ok := ourutils.ValidateStringNotempty(userID)
 	if !ok {
-		return nil, errors.New("Cannot search for user because userID is empty")
+		return nil, errors.New("cannot search for user because userID is empty")
 	}
 
 	// Create read-only transaction.
@@ -63,11 +63,11 @@ func (db *NotablyDB) GetUserByID(userID string) (*model.User, error) {
 
 	raw, err := txn.First(usersTableName, "id", userID)
 	if err != nil {
-		return nil, fmt.Errorf("Error getting user with ID '%s': %s", userID, err.Error())
+		return nil, fmt.Errorf("error getting user with ID '%s': %s", userID, err.Error())
 	}
 
 	if raw == nil {
-		return nil, fmt.Errorf("User not found: Nil result from DB for user '%s'", userID)
+		return nil, fmt.Errorf("user not found: Nil result from DB for user '%s'", userID)
 	}
 
 	user := raw.(model.User) // The go-memdb example is wrong here.
@@ -81,7 +81,7 @@ func (db *NotablyDB) GetAllUsers() ([]*model.User, error) {
 
 	iter, err := txn.Get(usersTableName, "id")
 	if err != nil {
-		return nil, fmt.Errorf("Failed getting all users: %s", err.Error())
+		return nil, fmt.Errorf("failed getting all users: %s", err.Error())
 	}
 
 	var userList []*model.User

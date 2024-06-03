@@ -46,7 +46,7 @@ func TestPersistence(t *testing.T) {
 		}
 
 		// Add the user again with the same ID. Should error.
-		user, err = db.AddUser(userID, "decafbad")
+		_, err = db.AddUser(userID, "decafbad")
 		if err == nil {
 			t.Fatalf("Should have encountered an error adding the same user again, but didn't")
 		}

@@ -11,6 +11,7 @@ import (
 	"github.com/segmentio/ksuid"
 )
 
+// ValidateStringNotempty checks whether a string is empty.
 // If the given string is non-empty, returns the space-trimmed string and true.
 // If the given string is empty, returns the empty string and false.
 func ValidateStringNotempty(theString string) (string, bool) {
@@ -28,7 +29,7 @@ func ValidateStringNotempty(theString string) (string, bool) {
 	return theString, true
 }
 
-// Helper function to validate a noteID and userID pair, since we use that quite a lot.
+// ValidateUserIDAndNoteID validates a noteID and userID pair, since we use that quite a lot.
 // If there were no errors, returns the space-stripped userID and noteID (in that order).
 // On errors, an error object is returned, along with EMPTY STRINGS for userID and noteID.
 func ValidateUserIDAndNoteID(userID, noteID string) (uid string, nid string, err error) {
@@ -45,7 +46,7 @@ func ValidateUserIDAndNoteID(userID, noteID string) (uid string, nid string, err
 	return userID, noteID, nil
 }
 
-// Generates a UUID-like entity using ksuid.
+// GenerateKsuid() generates a UUID-like entity using ksuid.
 // https://github.com/segmentio/ksuid/blob/master/README.md
 //
 // We use ksuid instead of a canonical UUID because a ksuid offers certain
@@ -63,16 +64,16 @@ func GenerateKsuid() (ksuid.KSUID, error) {
 	return ksuid.NewRandom()
 }
 
-// Convenience function to get a ksuid in string form.
+// GenerateKsuidAsString is a convenience function to get a ksuid in string form.
 func GenerateKsuidAsString() (string, error) {
 	ks, err := GenerateKsuid()
 	if err != nil {
-		return "", fmt.Errorf("Failed generating KSUID: %s", err.Error())
+		return "", fmt.Errorf("failed generating KSUID: %s", err.Error())
 	}
 	return ks.String(), nil
 }
 
-// Passwords are one-way-hashed using this function. We do NOT store plaintext passwords.
+// SHA256Hash creates a one-way-hash of the given plainText. We do NOT store plaintext passwords.
 // The return string is a hex representation of the hashed plaintext.
 func SHA256Hash(plainText string) string {
 	h := sha256.New()
@@ -81,7 +82,7 @@ func SHA256Hash(plainText string) string {
 	return hex.EncodeToString(hSum)
 }
 
-// Case-insensitive Contains function for strings.
+// StrContainsInsensitive is a case-insensitive Contains function for strings.
 // Strangely, I ended up with the same implementation as https://stackoverflow.com/a/44601360
 // when I went searching to see if there was a better way to do this :-)
 func StrContainsInsensitive(a, b string) bool {

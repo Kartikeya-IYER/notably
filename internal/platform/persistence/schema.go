@@ -102,7 +102,7 @@ func Open() (*NotablyDB, error) {
 
 	theDB, err := memdb.NewMemDB(schema)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to open DB: %s", err.Error())
+		return nil, fmt.Errorf("failed to open DB: %s", err.Error())
 	}
 
 	ourDB := NotablyDB{theDB}
